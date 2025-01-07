@@ -5,6 +5,8 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
-$routes->get('/login', 'LoginController::index');
+$routes->get('/', 'LoginController::index');
+/* Home*/
+
+/*Dashboard*/
 $routes->get('/dev/dashboard', 'DashboardController::index');
