@@ -11,7 +11,18 @@
 </head>
 <body>
     <div class="wrapper">
-        <form role="form" action="<?= base_url('dev/dashboard'); ?>">
+        <?php if (session()->getFlashdata('error')): ?>
+            <script>
+                alert("<?= session()->getFlashdata('error') ?>");
+            </script>
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('pesan')): ?>
+            <script>
+                alert("<?= session()->getFlashdata('pesan') ?>");
+            </script>
+        <?php endif; ?>
+        <form role="form" action="<?= base_url('dev/dashboard'); ?>" method="post">
             <h1>CHEMCO</h1>
             <div class="input-box">
                 <input type="text" placeholder="Username" name="username" value="" autofocus="" required>
