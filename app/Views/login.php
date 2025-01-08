@@ -10,14 +10,26 @@
 </head>
 <body>
     <div class="wrapper"> 
-        <form role="form" action="">
+    <?php if (session()->getFlashdata('error')): ?>
+            <script>
+                alert("<?= session()->getFlashdata('error') ?>");
+            </script>
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('pesan')): ?>
+            <script>
+                alert("<?= session()->getFlashdata('pesan') ?>");
+            </script>
+        <?php endif; ?>
+
+        <form role="form" action="<?= base_url('auth/login'); ?>" method="post">
             <h1>CHEMCO</h1>
             <div class="input-box">
-                <input type="text" placeholder="Username" name="username" value="" autofocus="">
+                <input type="text" placeholder="Username" name="username" value="" autofocus="" required>
                 <i class='bx bxs-user'></i>
             </div>
             <div class="input-box">
-                <input type="password" placeholder="Password" name="password" value="">
+                <input type="password" placeholder="Password" name="password" value="" required>
                 <i class='bx bx-lock'></i>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Login</button>

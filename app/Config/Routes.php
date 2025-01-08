@@ -8,5 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'LoginController::index');
 /* Home*/
 
+/*Login*/
+$routes->post('/auth/login', 'LoginController::Auth');
 /*Dashboard*/
 $routes->get('/dev/dashboard', 'DashboardController::index');
