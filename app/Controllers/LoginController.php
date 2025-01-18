@@ -41,8 +41,8 @@ class LoginController extends BaseController
 
                 if ($user['role'] == 'admin') {
                     return redirect()->to('/dev/dashboard');
-                } elseif ($user['role'] == 'teknisi') {
-                    return redirect()->to('/user/dashboard-user');
+                } elseif ($user['role'] == 'pic') {
+                    return redirect()->to('/PIC/dashboard');
                 } elseif ($user['role'] == 'customer') {
                     return redirect()->to('/customer');
                 } else {
@@ -57,5 +57,16 @@ class LoginController extends BaseController
             session()->setFlashdata('error', 'Username tidak ditemukan!');
             return redirect()->to('/');
         }
+    }
+
+    public function logout()
+    {
+        session()->destroy();
+        ?>
+        <script>
+            alert("Anda Telah Logout!!");
+            document.location = "<?= base_url('/'); ?>";
+        </script>
+        <?php
     }
 }

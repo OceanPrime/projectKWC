@@ -29,32 +29,31 @@
 							<div class="card full-height">
 								<div class="monitoring-container">
 									<div class="monitoring-row">
-										<div>
-											<div class="label">Customer :</div>
-											<select class="value">
-												<option value="ALKATEC" selected>ALKATEC</option>
-												<!-- Tambahkan opsi lainnya sesuai kebutuhan -->
-											</select>
-										</div>
-										<div>
-											<div class="label">JENIS :</div>
-											<div class="value">Roda 4</div>
-										</div>
+									<div>
+										<div class="label">Customer :</div>
+										<select id="customer-dropdown" name="customer_id">
+											<option value="">-- Select Customer --</option>
+											<?php foreach ($customers as $customer): ?>
+												<option value="<?= $customer['customer_id']; ?>"><?= $customer['customer_name']; ?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
+									<div>
+										<div class="label">JENIS :</div>
+										<div id="jenis-value" class="value">-</div>
+									</div>
 									</div>
 									<div class="monitoring-row">
-										<div>
-											<div class="label">Project :</div>
-											<select class="value">
-												<option value="ALKATEC" selected>MM1025_15x6.0</option>
-												<option value="CUSTOMER_2">CUSTOMER_2</option>
-												<option value="CUSTOMER_3">CUSTOMER_3</option>
-												<!-- Tambahkan opsi lainnya sesuai kebutuhan -->
-											</select>
-										</div>
-										<div>
-											<div class="label">MATERIAL :</div>
-											<div class="value">AlSi11</div>
-										</div>
+									<div>
+										<div class="label">Project :</div>
+										<select id="project-dropdown" name="project_id">
+											<option value="">-- Select Project --</option>
+										</select>
+									</div>
+									<div>
+										<div class="label">MATERIAL :</div>
+										<div id="material-value" class="value">-</div>
+									</div>
 									</div>
 									<div class="monitoring-row">
 										<div>
@@ -65,7 +64,7 @@
 										</div>
 										<div>
 											<div class="label">STATUS :</div>
-											<div class="value">Completed</div>
+											<div id="status-value" class="value">-</div>
 										</div>
 									</div>
 									<div class="monitoring-row">
@@ -81,40 +80,22 @@
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table id="basic-datatables" class="display table table-striped table-hover">
-									<thead>
-										<tr>
-											<th>TASK</th>
-											<th>PIC</th>
-											<th>STATUS</th>
-											<th>START P/A</th>
-											<th>FINISH P/A</th>
-											<th>GAP S.D(Days)</th>
-											<th>GAP F.D(Days)</th>
-											<th>Leap Time Planning</th>
-											<th>Leap Time Actual</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>ReDrawing</td>
-											<td>Aji Bapuk</td>
-											<td>COMPLATED-TIME</td>
-											<td>
-												<p>P (<span>03-Aug-23</span>)</p>
-												<p>A (<span>03-Aug-23</span>)</p>
-											</td>
-											<td>
-												<p>P (<span>03-Aug-23</span>)</p>
-												<p>A (<span>03-Aug-23</span>)</p>
-											</td>
-											<td>0</td>
-											<td>0</td>
-											<td>2</td>
-											<td>2</td>
-										</tr>
-									</tbody>
-								</table>
+							<table id="tasks-table" class="display table table-striped table-hover">
+								<thead>
+									<tr>
+										<th>TASK</th>
+										<th>PIC</th>
+										<th>STATUS</th>
+										<th>START P/A</th>
+										<th>FINISH P/A</th>
+										<th>GAP S.D(Days)</th>
+										<th>GAP F.D(Days)</th>
+										<th>Leap Time Planning</th>
+										<th>Leap Time Actual</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
 							</div>
 						</div>
 
@@ -150,4 +131,102 @@
 		</div>
 	</footer>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#customer-dropdown').change(function () {
+            var customerId = $(this).val();
+            var projectDropdown = $('#project-dropdown');
+            var jenis = $('#jenis-value');
+            var material = $('#material-value');
+            var status = $('#status-value');
+
+            // Reset dropdown dan detail
+            projectDropdown.html('<option value="">-- Select Project --</option>');
+            jenis.text('-');
+            material.text('-');
+            status.text('-');
+
+            // Reset tabel
+            $('#tasks-table tbody').html('');
+
+            if (customerId) {
+                // Fetch projects based on customer
+                $.ajax({
+                    url: '<?= base_url('monitoring/projects/') ?>' + customerId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log("Projects fetched:", response);
+                        response.forEach(function (project) {
+                            projectDropdown.append('<option value="' + project.id + '">' + project.model_name + '</option>');
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Failed to fetch projects:", xhr.responseText);
+                        alert('Failed to fetch projects. See console for details.');
+                    }
+                });
+            } else {
+                alert('Please select a customer.');
+            }
+        });
+
+        $('#project-dropdown').change(function () {
+            var projectId = $(this).val();
+
+            if (projectId) {
+                // Fetch project details
+                $.ajax({
+                    url: '<?= base_url('monitoring/details/') ?>' + projectId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log("Project details fetched:", response);
+                        $('#jenis-value').text(response.jenis);
+                        $('#material-value').text(response.material);
+                        $('#status-value').text(response.status);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Failed to fetch project details:", xhr.responseText);
+                        alert('Failed to fetch project details. See console for details.');
+                    }
+                });
+
+                // Fetch tasks for the project
+                $.ajax({
+                    url: '<?= base_url('monitoring/tasks/') ?>' + projectId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log("Tasks fetched:", response);
+                        var tbody = $('#tasks-table tbody');
+                        tbody.html('');
+                        response.forEach(function (task) {
+                            tbody.append(`
+                                <tr>
+                                    <td>${task.task_name}</td>
+                                    <td>${task.pic_name}</td>
+                                    <td>${task.status}</td>
+                                    <td>${task.start_plan} / ${task.start_actual}</td>
+                                    <td>${task.finish_plan} / ${task.finish_actual}</td>
+                                    <td>${task.gap_sd}</td>
+                                    <td>${task.gap_fd}</td>
+                                    <td>${task.leap_time_planning}</td>
+                                    <td>${task.leap_time_actual}</td>
+                                </tr>
+                            `);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Failed to fetch tasks:", xhr.responseText);
+                        alert('Failed to fetch tasks. See console for details.');
+                    }
+                });
+            } else {
+                alert('Please select a project.');
+            }
+        });
+    });
+</script>
+
 <?= $this->endSection(); ?>

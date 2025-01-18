@@ -19,6 +19,11 @@
                     </li>
                 </ul>
             </div>
+            <?php if (session()->getFlashdata('pesan')) :?>
+                <div class="alert alert-success" role="alert">
+                    <?= session()->getFlashdata('pesan'); ?>
+                </div>
+            <?php endif;?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -39,20 +44,17 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Costumer</th>
-                                            <th>Model</th>
-                                            <th>SIZE</th>
-                                            <th>Date</th>
+                                            <th>Customer Name</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $i = 1; ?>
+                                        <?php foreach ($customer as $k) : ?>
                                         <tr>
-                                            <td>1</td>
-                                            <td>CWH</td>
-                                            <td>MR 316</td>
-                                            <td>10x10cm</td>
-                                            <td>12/19/24</td>
+                                            <td scope="row"><?= $i++; ?></td>
+                                            <td><?= $k['customer_name']; ?></td>
                                         </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>

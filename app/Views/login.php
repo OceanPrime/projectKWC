@@ -22,7 +22,7 @@
                 alert("<?= session()->getFlashdata('pesan') ?>");
             </script>
         <?php endif; ?>
-        <form role="form" action="<?= base_url('dev/dashboard'); ?>" method="post">
+        <form role="form" action="<?= base_url('auth/login'); ?>" method="post">
             <h1>CHEMCO</h1>
             <div class="input-box">
                 <input type="text" placeholder="Username" name="username" value="" autofocus="" required>

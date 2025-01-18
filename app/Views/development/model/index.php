@@ -40,6 +40,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Model</th>
+                                            <th>Customer Name</th>
                                             <th>Size</th>
                                             <th>Product</th>
                                             <th>Material</th>
@@ -52,19 +53,23 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $i = 1; ?>
+                                        <?php foreach ($model as $k) : ?>
                                         <tr>
-                                            <td>1</td>
-                                            <td>MR 708</td>
-                                            <td>17x8.5 H5/6</td>
-                                            <td>MR 708_17x8.5 H5/6</td>
-                                            <td>ALSi7</td>
-                                            <td>Roda 4</td>
-                                            <td>COMPLETED</td>
-                                            <td>2-aug-2024</td>
-                                            <td>8-Nov-2024</td>
-                                            <td>102</td>
-                                            <td>327</td>
+                                            <td scope="row"><?= $i++; ?></td>
+                                            <td><?= $k['model_name']; ?></td>
+                                            <td><?= $k['customer_name']; ?></td>
+                                            <td><?= $k['size']; ?></td>
+                                            <td><?= $k['product']; ?></td>
+                                            <td><?= $k['material']; ?></td>
+                                            <td><?= $k['jenis']; ?></td>
+                                            <td><?= $k['status']; ?></td>
+                                            <td><?= $k['die_go']; ?></td>
+                                            <td><?= $k['plan_mp']; ?></td>
+                                            <td><?= $k['days_plan']; ?></td>
+                                            <td><?= $k['days_act']; ?></td>
                                         </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>

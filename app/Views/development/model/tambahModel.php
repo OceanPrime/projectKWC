@@ -26,68 +26,104 @@
                             <h4 class="card-title">Add Model</h4>
                         </div>
                         <div class="card-body">
-                            <form class="form" action="">
+                            <form class="form" action="/model-save" method="post">
+                            <?= csrf_field(); ?>
                                 <div class="row">
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="name">Size</label>
-                                            <input type="text" id="name" class="form-control"
-                                                placeholder="" name="name">
+                                            <label for="size">Size</label>
+                                            <input type="text" id="size" class="form-control <?=($validation->hasError('size')) ? 
+											'is-invalid' : '' ;?>" autofocus name="size" value="<?= old('size');?>">
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('size');?>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="local-address">Product</label>
-                                            <input type="text" id="local-address" class="form-control"
-                                                placeholder="" name="local-address">
+                                            <label for="product">Product</label>
+                                            <input type="text" id="product" class="form-control <?=($validation->hasError('product')) ? 
+											'is-invalid' : '' ;?>" name="product" value="<?= old('product');?>">
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('product');?>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="local-address">Material</label>
-                                            <input type="text" id="local-address" class="form-control"
-                                                placeholder="" name="local-address">
+                                            <label for="material">Material</label>
+                                            <input type="text" id="material" class="form-control <?=($validation->hasError('material')) ? 
+											'is-invalid' : '' ;?>" name="material" value="<?= old('material');?>">
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('material');?>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="local-address">Jenis</label>
-                                            <input type="text" id="local-address" class="form-control"
-                                                placeholder="" name="local-address">
+                                            <label for="jenis">Jenis</label>
+                                            <input type="text" id="jenis" class="form-control <?=($validation->hasError('jenis')) ? 
+											'is-invalid' : '' ;?>" name="jenis" value="<?= old('jenis');?>">
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('jenis');?>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="remote-address">Model</label>
-                                            <select class="form-control form-control" id="defaultSelect">
-                                                <option selected disabled>--Pilih--</option>
-                                                <option>MM1025</option>
-                                                <option>EVO 001</option>
+                                            <label for="customer_id">Customer</label>
+                                            <select class="form-control" id="customer_id" name="customer_id" required>
+                                                <option selected disabled>--Pilih Customer--</option>
+                                                <?php foreach ($customers as $customer): ?>
+                                                    <option value="<?= $customer['id']; ?>">
+                                                        <?= $customer['customer_name']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="local-address">DIE-GO</label>
-                                            <input type="date" id="local-address" class="form-control"
-                                                placeholder="" name="local-address">
+                                            <label for="die_go">DIE-GO</label>
+                                            <input type="date" id="die_go" class="form-control <?=($validation->hasError('die_go')) ? 
+											'is-invalid' : '' ;?>" name="die_go" value="<?= old('die_go');?>">
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('die_go');?>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="local-address">PLAN M/P</label>
-                                            <input type="date" id="local-address" class="form-control"
-                                                placeholder="" name="local-address">
+                                            <label for="model_name">Model</label>
+                                            <input type="text" id="model_name" class="form-control <?=($validation->hasError('model_name')) ? 
+											'is-invalid' : '' ;?>" name="model_name" value="<?= old('model_name');?>">
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('model_name');?>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="remote-address">STATUS</label>
-                                            <select class="form-control form-control" id="defaultSelect">
+                                            <label for="plan_mp">PLAN M/P</label>
+                                            <input type="date" id="plan_mp" class="form-control <?=($validation->hasError('plan_mp')) ? 
+											'is-invalid' : '' ;?>"  name="plan_mp" value="<?= old('plan_mp');?>">
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('plan_mp');?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="status">STATUS</label>
+                                            <select class="form-control <?=($validation->hasError('status')) ? 
+											'is-invalid' : '' ;?>" name="status" id="status" >
                                             <option selected disabled>--Pilih--</option>
                                                 <option>COMPLETED</option>
                                                 <option>ON PROGRESS</option>
                                             </select>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('status');?>
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex justify-content-start">

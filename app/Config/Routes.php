@@ -9,11 +9,31 @@ $routes->get('/', 'LoginController::index');
 /* Home*/
 
 /*Login*/
-$routes->get('/login', 'LoginController::index');
-/*Dashboard*/
+$routes->post('/auth/login', 'LoginController::Auth');
+$routes->get('/logout', 'LoginController::logout');
+
+/*Dashboard Admin*/
 $routes->get('/dev/dashboard', 'DashboardController::index');
-$routes->get('/dev/monitoring', 'DevController::index');
-$routes->get('/dev/model', 'DevController::model');
-$routes->get('/dev/model-tambah', 'DevController::tambahModel');
-$routes->get('/dev/costumer', 'DevController::costumer');
-$routes->get('/dev/costumer-tambah', 'DevController::tambahCostumer');
+
+/*Monitoring*/
+$routes->get('/dev/monitoring', 'MonitoringController::index');
+
+/*Model*/
+$routes->get('/dev/model', 'ModelController::model');
+$routes->get('/dev/model-tambah', 'ModelController::tambahModel');
+$routes->post('/model-save', 'ModelController::save');
+
+/*Customer*/
+$routes->get('/dev/costumer', 'CustomerController::customer');
+$routes->get('/dev/costumer-tambah', 'CustomerController::tambahCustomer');
+$routes->post('/Customer-save', 'CustomerController::save');
+
+/*Monitoring*/
+$routes->get('monitoring/projects/(:num)', '\App\Controllers\MonitoringController::getProjects/$1');
+$routes->get('monitoring/details/(:num)', '\App\Controllers\MonitoringController::getDetails/$1');
+$routes->get('monitoring/tasks/(:num)', '\App\Controllers\MonitoringController::getTasks/$1');
+
+
+/*Khusus PIC*/
+$routes->get('/PIC/dashboard', 'DashboardController::pic');
+
