@@ -415,6 +415,12 @@
 							</a>
 						</li>
 						<li class="nav-item">
+							<a href="<?= base_url('dev/manajemenPIC'); ?>">
+								<i class="fas fa-user-cog"></i>
+								<p>Manajemen PIC</p>
+							</a>
+						</li>
+						<li class="nav-item">
 							<a href="<?= base_url('/logout'); ?>">
 								<i class="fas fa-sign-out-alt"></i>
 								<p>Log out</p>

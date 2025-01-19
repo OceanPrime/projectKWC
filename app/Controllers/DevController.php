@@ -7,8 +7,35 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class DevController extends BaseController
 {
-    // Monitoring
+    // Manajemen Akun PIC
+   public function index()
+   {
+        $data = [
+            'title' => 'Dashboard',
+        ];
+        return view('development/manajemenAkun/index', $data);
+   }
+
+   public function tambahPIC()
+   {
+        $data = [
+            'title' => 'Dashboard',
+        ];
+        return view('development/manajemenAkun/tambahPIC', $data);
+   }
+
+   public function editPIC()
+   {
+        $data = [
+            'title' => 'Dashboard',
+        ];
+        return view('development/manajemenAkun/editPIC', $data);
+   }
+
+
    
-    // End Monitoring
+
+
+    // End Manajemen Akun PIC
 }
 

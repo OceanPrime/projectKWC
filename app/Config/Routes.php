@@ -28,6 +28,11 @@ $routes->get('/dev/costumer', 'CustomerController::customer');
 $routes->get('/dev/costumer-tambah', 'CustomerController::tambahCustomer');
 $routes->post('/Customer-save', 'CustomerController::save');
 
+/* manajemen pic */
+$routes->get('/dev/manajemenPIC', 'devController::index');
+$routes->get('/dev/tambahPIC', 'devController::tambahPIC');
+$routes->get('/dev/editPIC', 'devController::editPIC');
+
 /*Monitoring*/
 $routes->get('monitoring/projects/(:num)', '\App\Controllers\MonitoringController::getProjects/$1');
 $routes->get('monitoring/details/(:num)', '\App\Controllers\MonitoringController::getDetails/$1');
