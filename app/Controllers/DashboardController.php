@@ -7,7 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class DashboardController extends BaseController
 {
-    public function index()
+    public function index()//admin
     {
         $session = session();
         if ($session->get('role') !== 'admin') {
@@ -20,14 +20,26 @@ class DashboardController extends BaseController
         return view('development/dashboard', $data);
     }
 
-
-    public function pic()
+// KHUSUS ROLE PIC
+    public function ReDrawing()
     {
         $session = session();
-        if ($session->get('role') !== 'pic') {
+        if ($session->get('role') !== 'ReDrawing') {
             return redirect()->to('/');
-        }
+        } 
         
         return view('PIC/PIC');
     }
+
+    public function ApprovalReDraw()
+    {
+        $session = session();
+        if ($session->get('role') !== 'ApprovalReDraw') {
+            return redirect()->to('/');
+        } 
+
+        return view('PIC/PIC2');
+    }
+
+    // END KHUSUS ROLE PIC
 }

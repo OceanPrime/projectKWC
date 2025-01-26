@@ -50,6 +50,7 @@
                                             <th>Plan M/P</th>
                                             <th>Days Plan</th>
                                             <th>Days Act</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -68,6 +69,19 @@
                                             <td><?= $k['plan_mp']; ?></td>
                                             <td><?= $k['days_plan']; ?></td>
                                             <td><?= $k['days_act']; ?></td>
+                                            <td>
+                                                <div class="form-button-action">
+                                                    <a href="">
+                                                        <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-primary" data-original-title="Edit Task">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                    </a>
+                                                    <a href="" onclick="return confirm('Apakah yakin dihapus data ?')"
+                                                        type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-danger" data-original-title="Remove">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>

@@ -106,10 +106,20 @@
                                         <div class="form-group">
                                             <label for="plan_mp">PLAN M/P</label>
                                             <input type="date" id="plan_mp" class="form-control <?=($validation->hasError('plan_mp')) ? 
-											'is-invalid' : '' ;?>"  name="plan_mp" value="<?= old('plan_mp');?>">
+                                            'is-invalid' : '' ;?>"  name="plan_mp" value="<?= old('plan_mp');?>">
                                         </div>
                                         <div class="invalid-feedback">
                                             <?= $validation->getError('plan_mp');?>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="plan_finish">PLAN FINISH</label>
+                                            <input type="date" id="plan_finish" class="form-control <?=($validation->hasError('plan_finish')) ? 
+                                            'is-invalid' : '' ;?>"  name="plan_finish" value="<?= old('plan_finish');?>">
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <?= $validation->getError('plan_finish');?>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">

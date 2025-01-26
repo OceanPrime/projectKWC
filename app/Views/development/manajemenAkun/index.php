@@ -46,23 +46,25 @@
                                             <th>No</th>
                                             <th>Name</th>
                                             <th>Username</th>
-                                            <th>Password</th>
+                                
                                             <th>No. Handphone</th>
                                             <th>Role</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                       
+                                        <?php $i = 1; ?>
+                                        <?php foreach ($Usermodel as $k) : ?>
                                         <tr>
-                                            <td>1</td>
-                                            <td>Bule</td>
-                                            <td>Raven</td>
-                                            <td>Primus12</td>
-                                            <td>0888277161</td>
-                                            <td>Abang Otod</td>
+                                            <td scope="row"><?= $i++; ?></td>
+                                            <td><?= $k['nama']; ?></td>
+                                            <td><?= $k['username']; ?></td>
+                                            <td><?= $k['no_hp']; ?></td>
+                                            <td><?= $k['role']; ?></td>
                                             <td>
                                                 <div class="form-button-action">
-                                                    <a href="<?= base_url('/dev/editPIC'); ?>">
+                                                    <a href="<?= base_url('/dev/editPIC/' . $k['user_id']); ?>">
                                                         <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-primary" data-original-title="Edit Task">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
@@ -74,6 +76,9 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        <?php endforeach; ?>
+                                       
+                                        
                                     </tbody>
                                 </table>
                             </div>

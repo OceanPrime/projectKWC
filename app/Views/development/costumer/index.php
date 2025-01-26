@@ -45,6 +45,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Customer Name</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -53,6 +54,19 @@
                                         <tr>
                                             <td scope="row"><?= $i++; ?></td>
                                             <td><?= $k['customer_name']; ?></td>
+                                            <td>
+                                                <div class="form-button-action">
+                                                    <a href="">
+                                                        <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-primary" data-original-title="Edit Task">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                    </a>
+                                                    <a href="" onclick="return confirm('Apakah yakin dihapus data ?')"
+                                                        type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-danger" data-original-title="Remove">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>

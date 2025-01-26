@@ -25,41 +25,65 @@
                         <div class="card-header">
                             <h4 class="card-title">Add PIC</h4>
                         </div>
+                        <?php if (session()->getFlashdata('error_validation')): ?>
+                            <div class="alert alert-danger">
+                                <?= session()->getFlashdata('error_validation') ?>
+                            </div>
+                        <?php endif; ?>
+
                         <div class="card-body">
-                            <form class="form" action="" method="post">
+                            <form class="form" action="/PIC-save" method="post">
                                 <div class="row">
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="size">Nama</label>
-                                            <input type="text" id="size" class="form-control" autofocus name="size" value="">
+                                            <label for="nama">Nama</label>
+                                            <input type="text" id="nama" class="form-control" autofocus name="nama" value="<?= old('nama');?>" placeholder="Masukkan Nama Anda">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="product">Username</label>
-                                            <input type="text" id="product" class="form-control" name="product" value="">
+                                            <label for="username">Username</label>
+                                            <input type="text" id="username" class="form-control" name="username" value="<?= old('username');?>" placeholder="Masukkan Username Anda">
+                                            
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="product">Password</label>
-                                            <input type="password" id="product" class="form-control" name="product" value="">
+                                            <label for="password">Password</label>
+                                            <input type="password" id="password" class="form-control " name="password" value="<?= old('password');?>" placeholder="Masukkan Password Anda">
+                                            
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="product">No Handphone</label>
-                                            <input type="text" id="product" class="form-control" name="product" value="">
+                                            <label for="no_hp">No Handphone</label>
+                                            <input type="text" id="no_hp" class="form-control" name="no_hp" value="<?= old('no_hp');?>" placeholder="Masukkan No Handphone Anda">
+                                           
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="remote-address">Role</label>
-                                            <select class="form-control form-control" id="defaultSelect">
+                                            <select class="form-control" id="role" name="role">
                                                 <option selected disabled>--Pilih--</option>
-                                                <option>Development</option>
-                                                <option>PIC</option>
+                                                <option value="ReDrawing">ReDrawing</option>
+                                                <option value="ApprovalReDraw">Approval ReDraw</option>
+                                                <option value="DevelopmentSchedule">Development Schedule</option>
+                                                <option value="MoldManufacture">Mold Manufacture</option>
+                                                <option value="MoldShipment">Mold Shipment</option>
+                                                <option value="MoldArrival">Mold Arrival</option>
+                                                <option value="DevelopmentBox">DevelopmentBox</option>
+                                                <option value="DevelopCap">DevelopCap</option>
+                                                <option value="MoldAssy">Mold Assy</option>
+                                                <option value="TrialCasting">Trial Casting</option>
+                                                <option value="Machining">Machining</option>
+                                                <option value="Painting">Painting</option>
+                                                <option value="TestImpact">Test Impact</option>
+                                                <option value="TestBending">Test Bending</option>
+                                                <option value="TestRadial">Test Radial</option>
+                                                <option value="Packing&Delivery">Packing & Delivery</option>
                                             </select>
+                                        
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex justify-content-start">

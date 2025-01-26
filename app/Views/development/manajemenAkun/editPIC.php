@@ -25,40 +25,61 @@
                         <div class="card-header">
                             <h4 class="card-title">Edit PIC</h4>
                         </div>
+                        <?php if (session()->getFlashdata('error_validation')): ?>
+                            <div class="alert alert-danger">
+                                <?= session()->getFlashdata('error_validation') ?>
+                            </div>
+                        <?php endif; ?>
                         <div class="card-body">
-                            <form class="form" action="" method="post">
+                            <form class="form" action="<?= base_url('dev/updatePIC/' . $user['user_id']); ?>" method="post">
                                 <div class="row">
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="size">Nama</label>
-                                            <input type="text" id="size" class="form-control" autofocus name="size" value="">
+                                            <label for="nama">Nama</label>
+                                            <input type="text" id="nama" class="form-control" autofocus name="nama" value="<?= $user['nama']; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="product">Username</label>
-                                            <input type="text" id="product" class="form-control" name="product" value="">
+                                            <label for="username">Username</label>
+                                            <input type="hidden" name="user_id" value="<?= $user['user_id']; ?>">
+                                            <input type="text" id="username" class="form-control" name="username" value="<?= $user['username']; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="product">Password</label>
-                                            <input type="password" id="product" class="form-control" name="product" value="">
+                                            <label for="password">Password (biarkan kosong jika tidak ingin mengubah)</label>
+                                            <input type="password" id="password" class="form-control" name="password">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="product">No Handphone</label>
-                                            <input type="text" id="product" class="form-control" name="product" value="">
+                                            <label for="no_hp">No Handphone</label>
+                                            <input type="text" id="no_hp" class="form-control" name="no_hp" value="<?= $user['no_hp']; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="remote-address">Role</label>
-                                            <select class="form-control form-control" id="defaultSelect">
+                                            <label for="role">Role</label>
+                                            <select class="form-control form-control" id="role" name="role">
                                                 <option selected disabled>--Pilih--</option>
-                                                <option>Development</option>
-                                                <option>PIC</option>
+                                                <option value="admin" <?= $user['role'] == 'admin' ? 'selected' : ''; ?>>Admin</option>
+                                                <option value="ReDrawing" <?= $user['role'] == 'ReDrawing' ? 'selected' : ''; ?>>ReDrawing</option>
+                                                <option value="ApprovalReDraw" <?= $user['role'] == 'ApprovalReDraw' ? 'selected' : ''; ?>>Approval ReDraw</option>
+                                                <option value="DevelopmentSchedule" <?= $user['role'] == 'DevelopmentSchedule' ? 'selected' : ''; ?>>Development Schedule</option>
+                                                <option value="MoldManufacture" <?= $user['role'] == 'MoldManufacture' ? 'selected' : ''; ?>>Mold Manufacture</option>
+                                                <option value="MoldShipment" <?= $user['role'] == 'MoldShipment' ? 'selected' : ''; ?>>Mold Shipment</option>
+                                                <option value="MoldArrival" <?= $user['role'] == 'MoldArrival' ? 'selected' : ''; ?>>Mold Arrival</option>
+                                                <option value="DevelopmentBox" <?= $user['role'] == 'DevelopmentBox' ? 'selected' : ''; ?>>DevelopmentBox</option>
+                                                <option value="DevelopCap" <?= $user['role'] == 'DevelopCap' ? 'selected' : ''; ?>>DevelopCap</option>
+                                                <option value="MoldAssy" <?= $user['role'] == 'MoldAssy' ? 'selected' : ''; ?>>Mold Assy</option>
+                                                <option value="TrialCasting" <?= $user['role'] == 'TrialCasting' ? 'selected' : ''; ?>>Trial Casting</option>
+                                                <option value="Machining" <?= $user['role'] == 'Machining' ? 'selected' : ''; ?>>Machining</option>
+                                                <option value="Painting" <?= $user['role'] == 'Painting' ? 'selected' : ''; ?>>Painting</option>
+                                                <option value="TestImpact" <?= $user['role'] == 'TestImpact' ? 'selected' : ''; ?>>Test Impact</option>
+                                                <option value="TestBending" <?= $user['role'] == 'TestBending' ? 'selected' : ''; ?>>Test Bending</option>
+                                                <option value="TestRadial" <?= $user['role'] == 'TestRadial' ? 'selected' : ''; ?>>Test Radial</option>
+                                                <option value="Packing&Delivery" <?= $user['role'] == 'Packing&Delivery' ? 'selected' : ''; ?>>Packing & Delivery</option>
                                             </select>
                                         </div>
                                     </div>

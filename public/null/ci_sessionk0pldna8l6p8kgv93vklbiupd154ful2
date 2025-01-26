@@ -1,0 +1,11 @@
+__ci_last_regenerate|i:1737864496;_ci_previous_url|s:35:"http://localhost:8080/dev/tambahPIC";user_id|s:1:"1";username|s:9:"developer";nama|s:3:"aji";no_hp|s:16:"0813152325252222";role|s:5:"admin";logged_in|b:1;error_validation|s:303:"<!-- DEBUG-VIEW START 1 SYSTEMPATH\Validation\Views\list.php -->
+	<div class="errors" role="alert">
+		<ul>
+					<li>Nama Harus di Isi!</li>
+					<li>No HP Harus di Isi!</li>
+					<li>Role harus di pilih.</li>
+				</ul>
+	</div>
+
+<!-- DEBUG-VIEW ENDED 1 SYSTEMPATH\Validation\Views\list.php -->
+";__ci_vars|a:3:{s:16:"error_validation";s:3:"old";s:13:"_ci_old_input";s:3:"old";s:21:"_ci_validation_errors";s:3:"old";}_ci_old_input|a:2:{s:3:"get";a:0:{}s:4:"post";a:4:{s:4:"nama";s:0:"";s:8:"username";s:1:"y";s:8:"password";s:8:"teknisi1";s:5:"no_hp";s:0:"";}}_ci_validation_errors|a:3:{s:4:"nama";s:18:"Nama Harus di Isi!";s:5:"no_hp";s:19:"No HP Harus di Isi!";s:4:"role";s:20:"Role harus di pilih.";}

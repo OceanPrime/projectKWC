@@ -26,6 +26,14 @@
 							<h4 class="card-title">Monitoring Data</h4>
 						</div>
 						<div class="card-body">
+                            <a href="<?= base_url('/dev/monitoring-tambah'); ?>">
+                                <button class="btn btn-primary rounded-pill">
+                                    <i class="fa fa-plus"></i>
+                                    Add Task PIC
+                                </button>
+                            </a>
+                        </div>
+						<div class="card-body">
 							<div class="card full-height">
 								<div class="monitoring-container">
 									<div class="monitoring-row">
@@ -59,7 +67,7 @@
 										<div>
 											<div class="label">DIE - GO DATE :</div>
 											<div class="date-input">
-												<input type="date" value="2023-01-10">
+												<input type="date" >
 											</div>
 										</div>
 										<div>
@@ -71,7 +79,7 @@
 										<div>
 											<div class="label">MASSPRO DATE :</div>
 											<div class="date-input">
-												<input type="date" value="2024-04-28">
+												<input type="date">
 											</div>
 										</div>
 									</div>

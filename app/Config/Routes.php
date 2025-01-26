@@ -17,6 +17,12 @@ $routes->get('/dev/dashboard', 'DashboardController::index');
 
 /*Monitoring*/
 $routes->get('/dev/monitoring', 'MonitoringController::index');
+$routes->post('/monitoring-save', 'MonitoringController::saveMonitoring');
+$routes->get('/dev/monitoring-tambah', 'MonitoringController::tambahMonitoring');
+$routes->get('monitoring/planFinish/(:num)', 'MonitoringController::getPlanFinish/$1');
+$routes->get('monitoring/getProjects/(:num)', 'MonitoringController::getProjects/$1');
+$routes->get('monitoring/getPlanFinish/(:num)', 'MonitoringController::getPlanFinish/$1');
+
 
 /*Model*/
 $routes->get('/dev/model', 'ModelController::model');
@@ -29,9 +35,14 @@ $routes->get('/dev/costumer-tambah', 'CustomerController::tambahCustomer');
 $routes->post('/Customer-save', 'CustomerController::save');
 
 /* manajemen pic */
-$routes->get('/dev/manajemenPIC', 'devController::index');
-$routes->get('/dev/tambahPIC', 'devController::tambahPIC');
-$routes->get('/dev/editPIC', 'devController::editPIC');
+$routes->get('/dev/manajemenPIC', 'LoginController::pic');
+$routes->get('/dev/tambahPIC', 'LoginController::tambahPIC');
+//$routes->get('/dev/editPIC', 'LoginController::editPIC');
+$routes->post('/PIC-save', 'LoginController::savePic');
+$routes->post('dev/updatePIC/(:num)', 'LoginController::updatePIC/$1');
+$routes->get('dev/editPIC/(:num)', 'LoginController::editPIC/$1');
+
+
 
 /*Monitoring*/
 $routes->get('monitoring/projects/(:num)', '\App\Controllers\MonitoringController::getProjects/$1');
@@ -39,6 +50,7 @@ $routes->get('monitoring/details/(:num)', '\App\Controllers\MonitoringController
 $routes->get('monitoring/tasks/(:num)', '\App\Controllers\MonitoringController::getTasks/$1');
 
 
-/*Khusus PIC*/
-$routes->get('/PIC/dashboard', 'DashboardController::pic');
+/*Khusus Role PIC*/
+$routes->get('/PIC/dashboard', 'DashboardController::ReDrawing');
+$routes->get('/PIC/dashboard2', 'DashboardController::ApprovalReDraw');
 

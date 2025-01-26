@@ -98,6 +98,12 @@ class ModelController extends BaseController
                     'required' => '{field} Harus diisi'
                 ]
                 ],
+            'plan_finish' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '{field} Harus diisi'
+                ]
+                ],
         ])){
             return redirect()->to('/dev/model-tambah')->withInput();
         }
@@ -116,6 +122,7 @@ class ModelController extends BaseController
             'jenis' => $this->request->getVar('jenis'),
             'status' => $this->request->getVar('status'),
             'die_go' => $this->request->getVar('die_go'),
+            'plan_finish' => $this->request->getVar('plan_finish'),
             'plan_mp' => $this->request->getVar('plan_mp'),
 
         ]);
