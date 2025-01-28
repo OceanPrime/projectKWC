@@ -26,48 +26,48 @@
 							<h4 class="card-title">Monitoring Data</h4>
 						</div>
 						<div class="card-body">
-                            <a href="<?= base_url('/dev/monitoring-tambah'); ?>">
-                                <button class="btn btn-primary rounded-pill">
-                                    <i class="fa fa-plus"></i>
-                                    Add Task PIC
-                                </button>
-                            </a>
-                        </div>
+							<a href="<?= base_url('/dev/monitoring-tambah'); ?>">
+								<button class="btn btn-primary rounded-pill">
+									<i class="fa fa-plus"></i>
+									Add Project
+								</button>
+							</a>
+						</div>
 						<div class="card-body">
 							<div class="card full-height">
 								<div class="monitoring-container">
 									<div class="monitoring-row">
-									<div>
-										<div class="label">Customer :</div>
-										<select id="customer-dropdown" name="customer_id">
-											<option value="">-- Select Customer --</option>
-											<?php foreach ($customers as $customer): ?>
-												<option value="<?= $customer['customer_id']; ?>"><?= $customer['customer_name']; ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-									<div>
-										<div class="label">JENIS :</div>
-										<div id="jenis-value" class="value">-</div>
-									</div>
+										<div>
+											<div class="label">Customer :</div>
+											<select id="customer-dropdown" name="customer_id">
+												<option value="">-- Select Customer --</option>
+												<?php foreach ($customers as $customer): ?>
+													<option value="<?= $customer['customer_id']; ?>"><?= $customer['customer_name']; ?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+										<div>
+											<div class="label">JENIS :</div>
+											<div id="jenis-value" class="value">-</div>
+										</div>
 									</div>
 									<div class="monitoring-row">
-									<div>
-										<div class="label">Project :</div>
-										<select id="project-dropdown" name="project_id">
-											<option value="">-- Select Project --</option>
-										</select>
-									</div>
-									<div>
-										<div class="label">MATERIAL :</div>
-										<div id="material-value" class="value">-</div>
-									</div>
+										<div>
+											<div class="label">Project :</div>
+											<select id="project-dropdown" name="project_id">
+												<option value="">-- Select Project --</option>
+											</select>
+										</div>
+										<div>
+											<div class="label">MATERIAL :</div>
+											<div id="material-value" class="value">-</div>
+										</div>
 									</div>
 									<div class="monitoring-row">
 										<div>
 											<div class="label">DIE - GO DATE :</div>
-											<div class="date-input">
-												<input type="date" >
+											<div id="" class="date-input">
+												<input type="date">
 											</div>
 										</div>
 										<div>
@@ -82,135 +82,113 @@
 												<input type="date">
 											</div>
 										</div>
+										<div>
+											<div class="label">REMARK PIC :</div>
+											<div id="" class="value">-</div>
+										</div>
+
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-							<table id="tasks-table" class="display table table-striped table-hover">
-								<thead>
-									<tr>
-										<th>TASK</th>
-										<th>PIC</th>
-										<th>STATUS</th>
-										<th>START P/A</th>
-										<th>FINISH P/A</th>
-										<th>GAP S.D(Days)</th>
-										<th>GAP F.D(Days)</th>
-										<th>Leap Time Planning</th>
-										<th>Leap Time Actual</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
+								<table id="tasks-table" class="display table table-striped table-hover">
+									<thead>
+										<tr>
+											<th>TASK</th>
+											<th>PIC</th>
+											<th>STATUS</th>
+											<th>START P/A</th>
+											<th>FINISH P/A</th>
+											<th>GAP S.D(Days)</th>
+											<th>GAP F.D(Days)</th>
+											<th>Leap Time Planning</th>
+											<th>Leap Time Actual</th>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
 							</div>
 						</div>
-
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<footer class="footer">
-		<div class="container-fluid">
-			<nav class="pull-left">
-				<ul class="nav">
-					<li class="nav-item">
-						<a class="nav-link" href="https://www.themekita.com">
-							ThemeKita
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">
-							Help
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">
-							Licenses
-						</a>
-					</li>
-				</ul>
-			</nav>
-			<div class="copyright ml-auto">
-				2018, made with <i class="fa fa-heart heart text-danger"></i> by <a href="https://www.themekita.com">ThemeKita</a>
-			</div>
-		</div>
-	</footer>
 </div>
 <script>
-    $(document).ready(function () {
-        $('#customer-dropdown').change(function () {
-            var customerId = $(this).val();
-            var projectDropdown = $('#project-dropdown');
-            var jenis = $('#jenis-value');
-            var material = $('#material-value');
-            var status = $('#status-value');
+	$(document).ready(function() {
+		$('#customer-dropdown').change(function() {
+			var customerId = $(this).val();
+			var projectDropdown = $('#project-dropdown');
+			var jenis = $('#jenis-value');
+			var material = $('#material-value');
+			var status = $('#status-value');
 
-            // Reset dropdown dan detail
-            projectDropdown.html('<option value="">-- Select Project --</option>');
-            jenis.text('-');
-            material.text('-');
-            status.text('-');
+			// Reset dropdown dan detail
+			projectDropdown.html('<option value="">-- Select Project --</option>');
+			jenis.text('-');
+			material.text('-');
+			status.text('-');
 
-            // Reset tabel
-            $('#tasks-table tbody').html('');
+			// Reset tabel
+			$('#tasks-table tbody').html('');
 
-            if (customerId) {
-                // Fetch projects based on customer
-                $.ajax({
-                    url: '<?= base_url('monitoring/projects/') ?>' + customerId,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log("Projects fetched:", response);
-                        response.forEach(function (project) {
-                            projectDropdown.append('<option value="' + project.id + '">' + project.model_name + '</option>');
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("Failed to fetch projects:", xhr.responseText);
-                        alert('Failed to fetch projects. See console for details.');
-                    }
-                });
-            } else {
-                alert('Please select a customer.');
-            }
-        });
+			if (customerId) {
+				// Fetch projects based on customer
+				$.ajax({
+					url: '<?= base_url('monitoring/projects/') ?>' + customerId,
+					type: 'GET',
+					dataType: 'json',
+					success: function(response) {
+						console.log("Projects fetched:", response);
+						response.forEach(function(project) {
+							projectDropdown.append('<option value="' + project.id + '">' + project.model_name + '</option>');
+						});
+					},
+					error: function(xhr, status, error) {
+						console.error("Failed to fetch projects:", xhr.responseText);
+						alert('Failed to fetch projects. See console for details.');
+					}
+				});
+			} else {
+				alert('Please select a customer.');
+			}
+		});
 
-        $('#project-dropdown').change(function () {
-            var projectId = $(this).val();
+		$('#project-dropdown').change(function() {
+			var projectId = $(this).val();
 
-            if (projectId) {
-                // Fetch project details
-                $.ajax({
-                    url: '<?= base_url('monitoring/details/') ?>' + projectId,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log("Project details fetched:", response);
-                        $('#jenis-value').text(response.jenis);
-                        $('#material-value').text(response.material);
-                        $('#status-value').text(response.status);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("Failed to fetch project details:", xhr.responseText);
-                        alert('Failed to fetch project details. See console for details.');
-                    }
-                });
+			if (projectId) {
+				// Fetch project details
+				$.ajax({
+					url: '<?= base_url('monitoring/details/') ?>' + projectId,
+					type: 'GET',
+					dataType: 'json',
+					success: function(response) {
+						console.log("Project details fetched:", response);
+						$('#jenis-value').text(response.jenis);
+						$('#material-value').text(response.material);
+						$('#status-value').text(response.status);
+					},
+					error: function(xhr, status, error) {
+						console.error("Failed to fetch project details:", xhr.responseText);
+						alert('Failed to fetch project details. See console for details.');
+					}
+				});
 
-                // Fetch tasks for the project
-                $.ajax({
-                    url: '<?= base_url('monitoring/tasks/') ?>' + projectId,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log("Tasks fetched:", response);
-                        var tbody = $('#tasks-table tbody');
-                        tbody.html('');
-                        response.forEach(function (task) {
-                            tbody.append(`
+				// Fetch tasks for the project
+				$.ajax({
+					url: '<?= base_url('monitoring/tasks/') ?>' + projectId,
+					type: 'GET',
+					dataType: 'json',
+					success: function(response) {
+						console.log("Tasks fetched:", response);
+						var tbody = $('#tasks-table tbody');
+						tbody.html('');
+						response.forEach(function(task) {
+							tbody.append(`
                                 <tr>
                                     <td>${task.task_name}</td>
                                     <td>${task.pic_name}</td>
@@ -223,18 +201,18 @@
                                     <td>${task.leap_time_actual}</td>
                                 </tr>
                             `);
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("Failed to fetch tasks:", xhr.responseText);
-                        alert('Failed to fetch tasks. See console for details.');
-                    }
-                });
-            } else {
-                alert('Please select a project.');
-            }
-        });
-    });
+						});
+					},
+					error: function(xhr, status, error) {
+						console.error("Failed to fetch tasks:", xhr.responseText);
+						alert('Failed to fetch tasks. See console for details.');
+					}
+				});
+			} else {
+				alert('Please select a project.');
+			}
+		});
+	});
 </script>
 
 <?= $this->endSection(); ?>

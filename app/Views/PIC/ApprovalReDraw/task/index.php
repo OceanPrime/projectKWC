@@ -1,4 +1,4 @@
-<?= $this->extend('layout/template'); ?>
+<?= $this->extend('PIC/layout/template'); ?>
 <?= $this->section('content'); ?>
 <div class="main-panel">
     <div class="content">
@@ -54,21 +54,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $i = 1; ?>
-                                        <?php foreach ($model as $k) : ?>
                                         <tr>
-                                            <td scope="row"><?= $i++; ?></td>
-                                            <td><?= $k['model_name']; ?></td>
-                                            <td><?= $k['customer_name']; ?></td>
-                                            <td><?= $k['size']; ?></td>
-                                            <td><?= $k['product']; ?></td>
-                                            <td><?= $k['material']; ?></td>
-                                            <td><?= $k['jenis']; ?></td>
-                                            <td><?= $k['status']; ?></td>
-                                            <td><?= $k['die_go']; ?></td>
-                                            <td><?= $k['plan_mp']; ?></td>
-                                            <td><?= $k['days_plan']; ?></td>
-                                            <td><?= $k['days_act']; ?></td>
+                                            
+                                            <td></td>
+
                                             <td>
                                                 <div class="form-button-action">
                                                     <a href="<?=base_url('/dev/model-edit'); ?>">
@@ -76,14 +65,9 @@
                                                             <i class="fa fa-edit"></i>
                                                         </button>
                                                     </a>
-                                                    <a href="" onclick="return confirm('Apakah yakin dihapus data ?')"
-                                                        type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-danger" data-original-title="Remove">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
-                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>

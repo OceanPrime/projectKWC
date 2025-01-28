@@ -3,9 +3,8 @@
 
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title><?= $title; ?></title>
+	<title>Dashboard</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="icon" href="<?= base_url(); ?>../assets/img/icon.ico" type="image/x-icon" />
 
 	<!-- Fonts and icons -->
@@ -131,7 +130,7 @@
 		</div>
 
 		<!-- MAIN CONTENT -->
-		<?= $this->renderSection('content'); ?>
+		<?= $this->renderSection('contentPIC'); ?>
 		<!-- END CONTENT -->
 
 		<!-- Sidebar -->
@@ -147,43 +146,26 @@
 								<span>
 									Hizrian
 									<span class="user-level">Administrator</span>
+									<span class="caret"></span>
 								</span>
 							</a>
 						</div>
 					</div>
 					<ul class="nav nav-primary">
 						<li class="nav-item active">
-							<a href="<?= base_url('dev/dashboard'); ?>" class="collapsed" aria-expanded="false">
+							<a href="" class="collapsed" aria-expanded="false">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="<?= base_url('dev/monitoring'); ?>">
+							<a href="<?=base_url('/PIC/ApprovalRedraw/index'); ?>">
 								<i class="fas fa-desktop"></i>
-								<p>Monitoring</p>
+								<p>TASK</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="<?= base_url('dev/model'); ?>">
-								<i class="far fa-window-restore"></i>
-								<p>Model</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="<?= base_url('dev/costumer'); ?>">
-								<i class="fas fa-user"></i>
-								<p>Costumer</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="<?= base_url('dev/manajemenPIC'); ?>">
-								<i class="fas fa-user-cog"></i>
-								<p>PIC Management</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="<?= base_url('/logout'); ?>">
+							<a href="">
 								<i class="fas fa-sign-out-alt"></i>
 								<p>Log out</p>
 							</a>
@@ -195,7 +177,6 @@
 		<!-- End Sidebar -->
 
 	</div>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<!--   Core JS Files   -->
 	<script src="<?= base_url(); ?>../assets/js/core/jquery.3.2.1.min.js"></script>
 	<script src="<?= base_url(); ?>../assets/js/core/popper.min.js"></script>

@@ -26,7 +26,7 @@
                             <h4 class="card-title">Edit PIC</h4>
                         </div>
                         <div class="card-body">
-                            <form class="form" action="" method="post">
+                            <form class="form" action="" method="">
                                 <div class="row">
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
@@ -65,7 +65,7 @@
                                     <div class="col-12 d-flex justify-content-start">
                                         <button type="submit"
                                             class="btn btn-primary me-1 mb-1">Update</button>
-                                        <a href="<?= base_url('dev/manajemenPIC'); ?>" class="btn btn-danger me-1 mb-1">
+                                        <a href="<?= base_url('/dev/model'); ?>" class="btn btn-danger me-1 mb-1">
                                             Cancel
                                         </a>
                                     </div>

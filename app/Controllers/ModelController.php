@@ -134,4 +134,10 @@ class ModelController extends BaseController
         session()->setFlashdata('pesan', 'Data Berhasil ditambahkan.');
         return redirect()->to('/dev/model');
     }
+
+    public function editModel()
+    {
+        $data['title'] = 'Edit Model';
+        return view('development/model/editModel', $data);
+    }
 }

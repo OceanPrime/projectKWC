@@ -23,11 +23,11 @@ $routes->get('monitoring/planFinish/(:num)', 'MonitoringController::getPlanFinis
 $routes->get('monitoring/getProjects/(:num)', 'MonitoringController::getProjects/$1');
 $routes->get('monitoring/getPlanFinish/(:num)', 'MonitoringController::getPlanFinish/$1');
 
-
 /*Model*/
 $routes->get('/dev/model', 'ModelController::model');
 $routes->get('/dev/model-tambah', 'ModelController::tambahModel');
 $routes->post('/model-save', 'ModelController::save');
+$routes->get('/dev/model-edit', 'ModelController::editModel');
 
 /*Customer*/
 $routes->get('/dev/costumer', 'CustomerController::customer');
@@ -51,6 +51,10 @@ $routes->get('monitoring/tasks/(:num)', '\App\Controllers\MonitoringController::
 
 
 /*Khusus Role PIC*/
-$routes->get('/PIC/dashboard', 'DashboardController::ReDrawing');
-$routes->get('/PIC/dashboard2', 'DashboardController::ApprovalReDraw');
+$routes->get('/PIC/ReDrawing', 'DashboardController::ReDrawing');
+
+$routes->get('/PIC/ApprovalRedraw', 'DashboardController::ApprovalReDraw');
+$routes->get('/PIC/ApprovalRedraw/index', 'DashboardController::indexApprovalReDraw');
+$routes->get('/PIC/ApprovalRedraw-edit', 'DashboardController::editApprovalReDraw');
+
 

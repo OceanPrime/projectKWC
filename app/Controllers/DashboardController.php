@@ -28,7 +28,7 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         } 
         
-        return view('PIC/PIC');
+        return view('PIC/ReDrawing/dashboard');
     }
 
     public function ApprovalReDraw()
@@ -38,7 +38,22 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         } 
 
-        return view('PIC/PIC2');
+        return view('PIC/ApprovalReDraw/dashboard');
+    }
+
+    public function indexApprovalReDraw()
+    {
+        $session = session();
+        if ($session->get('role') !== 'ApprovalReDraw') {
+            return redirect()->to('/');
+        } 
+
+        return view('PIC/ApprovalReDraw/task/index');
+    }
+
+    public function editApprovalReDraw()
+    {
+        return view('PIC/ApprovalReDraw/edit');
     }
 
     // END KHUSUS ROLE PIC

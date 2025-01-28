@@ -43,10 +43,10 @@ class LoginController extends BaseController
                     return redirect()->to('/dev/dashboard');
 
                 } elseif ($user['role'] == 'ReDrawing') {
-                    return redirect()->to('/PIC/dashboard');
+                    return redirect()->to('/PIC/ReDrawing');
 
                 } elseif ($user['role'] == 'ApprovalReDraw') {
-                    return redirect()->to('/PIC/dashboard2');
+                    return redirect()->to('/PIC/ApprovalRedraw');
 
                 } elseif ($user['role'] == 'DevelopmentSchedule') {
                     return redirect()->to('/belum ada');//vbelum
