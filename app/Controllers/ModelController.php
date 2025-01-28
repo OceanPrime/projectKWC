@@ -14,20 +14,20 @@ class ModelController extends BaseController
     protected $M_Customer;
     public function __construct()
     {
-        
+
         $this->M_Model = new M_Model();
         $this->M_Customer = new M_Customer();
     }
 
     public function model()
-{
-    $data = [
-        'title' => 'Model Data',
-        'validation' => \Config\Services::validation(),
-        'model' => $this->M_Model->getModel() 
-    ];
-    return view('development/model/index', $data);
-}
+    {
+        $data = [
+            'title' => 'Model Data',
+            'validation' => \Config\Services::validation(),
+            'model' => $this->M_Model->getModel()
+        ];
+        return view('development/model/index', $data);
+    }
 
 
     public function tambahModel()
@@ -42,75 +42,75 @@ class ModelController extends BaseController
 
     public function save()
     {
-        if(!$this->validate([
+        if (!$this->validate([
             'model_name' => [
                 'rules' => 'required|is_unique[models.model_name]',
                 'errors' => [
                     'required' => '{field} Harus di isi!',
                     'is_unique' => '{field} Sudah terdaftar atau sudah ada <br> coba {field} lain yah!'
                 ]
-                ],
+            ],
             'customer_id' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Harus di isi!',
                 ]
-                ],
+            ],
             'size' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Harus di isi!'
                 ]
-                ],
+            ],
             'product' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Harus di isi'
                 ]
-                ],
+            ],
             'material' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Harus diisi'
                 ]
-                ],
+            ],
             'jenis' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Harus diisi'
                 ]
-                ],
+            ],
             'status' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Harus diisi'
                 ]
-                ],
+            ],
             'die_go' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Harus diisi'
                 ]
-                ],
+            ],
             'plan_mp' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Harus diisi'
                 ]
-                ],
+            ],
             'plan_finish' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Harus diisi'
                 ]
-                ],
-        ])){
+            ],
+        ])) {
             return redirect()->to('/dev/model-tambah')->withInput();
         }
 
-         // Ambil customer_name berdasarkan customer_id
-            $customerId = $this->request->getVar('customer_id');
-            $customer = $this->M_Customer->find($customerId);
+        // Ambil customer_name berdasarkan customer_id
+        $customerId = $this->request->getVar('customer_id');
+        $customer = $this->M_Customer->find($customerId);
 
         $this->M_Model->save([
             'model_name' => $this->request->getVar('model_name'),
@@ -127,7 +127,7 @@ class ModelController extends BaseController
 
         ]);
 
-         // Debugging: Tampilkan data yang diterima
+        // Debugging: Tampilkan data yang diterima
         //var_dump($data); // Menampilkan data yang akan disimpan
         //exit(); // Menghentikan eksekusi untuk melihat hasilnya
 

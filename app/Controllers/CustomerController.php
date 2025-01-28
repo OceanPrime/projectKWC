@@ -36,40 +36,105 @@ class CustomerController extends BaseController
 
     //simpan data
     public function save()
-        {       
-            // Ambil data dari input
-            $customerName = $this->request->getVar('customer_name');
-            $customerNameCustom = $this->request->getVar('customer_name_custom');
+    {
+        // Ambil data dari input
+        $customerName = $this->request->getVar('customer_name');
+        $customerNameCustom = $this->request->getVar('customer_name_custom');
 
-            // Gunakan input manual jika ada
-            if (!empty($customerNameCustom)) {
-                $customerName = $customerNameCustom;
-            }
+        // Gunakan input manual jika ada
+        if (!empty($customerNameCustom)) {
+            $customerName = $customerNameCustom;
+        }
 
-            // Debugging
-            //log_message('info', 'Data customer_name yang diterima: ' . $customerName);
-            //dd($customerName);
+        // Debugging
+        //log_message('info', 'Data customer_name yang diterima: ' . $customerName);
+        //dd($customerName);
 
-            // Validasi
-            if (!$this->validate([
-                'customer_name' => [
-                    'rules' => 'required|is_unique[customers.customer_name]',
-                    'errors' => [
-                        'required' => 'Customer harus diisi!',
-                        'is_unique' => 'Customer sudah ada.'
-                    ]
+        // Validasi
+        if (!$this->validate([
+            'customer_name' => [
+                'rules' => 'required|is_unique[customers.customer_name]',
+                'errors' => [
+                    'required' => 'Customer harus diisi!',
+                    'is_unique' => 'Customer sudah ada.'
                 ]
-            ])) {
-                return redirect()->back()->withInput()->with('validation', \Config\Services::validation());
-            }
+            ]
+        ])) {
+            return redirect()->back()->withInput()->with('validation', \Config\Services::validation());
+        }
 
-            // Simpan data ke database
-            $this->customerModel->save([
-                'customer_name' => $customerName
-            ]);
+        // Simpan data ke database
+        $this->customerModel->save([
+            'customer_name' => $customerName
+        ]);
 
-            session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
+        session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
+        return redirect()->to('/dev/costumer');
+    }
+
+    // Backend edit Customer
+    public function editCustomer($id)
+    {
+        $customerModel = new M_Customer();
+        $data = [
+            'title' => 'Update Customer',
+            'validation' => \Config\Services::validation(),
+            'customer' => $customerModel->find($id),
+        ];
+        return view('development/costumer/editCostumer', $data);
+    }
+
+    public function updateCustomer($id)
+    {
+        // Ambil data dari input
+        $customer_id = $this->request->getPost('id');
+
+        $customerModel = new M_Customer();
+        $customerLama = $customerModel->find($customer_id);
+
+        if (!$customerLama) {
+            session()->setFlashdata('error', 'User tidak ditemukan.');
             return redirect()->to('/dev/costumer');
         }
 
+        $customerLama = $this->request->getVar('customer_id');
+        $customerName = $this->request->getVar('customer_name');
+
+        if (!$this->validate([
+            'customer_name' => [
+                'rules' => "required|is_unique[customers.customer_name,id, $id]",
+                'errors' => [
+                    'required' => 'Customer harus diisi!',
+                    'is_unique' => 'Customer sudah ada.'
+                ]
+            ]
+        ])) {
+            return redirect()->back()->withInput()->with('validation', \Config\Services::validation());
+        }
+
+        // Update data customer ke database
+        $this->customerModel->update($id, [
+            'customer_name' => $customerName
+        ]);
+
+        session()->setFlashdata('pesan', 'Data customer berhasil diupdate.');
+        return redirect()->to('/dev/costumer');
+    }
+
+    public function deleteCustomer($id)
+    {
+        // Cek apakah data customer ada
+        $customer = $this->customerModel->find($id);
+        if (!$customer) {
+            session()->setFlashdata('error', 'Customer tidak ditemukan.');
+            return redirect()->to('/dev/costumer');
+        }
+
+        // Hapus data
+        $this->customerModel->delete($id);
+        session()->setFlashdata('pesan', 'Customer berhasil dihapus.');
+        return redirect()->to('/dev/costumer');
+    }
+
+    // End
 }

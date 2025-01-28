@@ -33,6 +33,10 @@ $routes->get('/dev/model-edit', 'ModelController::editModel');
 $routes->get('/dev/costumer', 'CustomerController::customer');
 $routes->get('/dev/costumer-tambah', 'CustomerController::tambahCustomer');
 $routes->post('/Customer-save', 'CustomerController::save');
+$routes->get('/dev/costumer-edit/(:num)', 'CustomerController::editCustomer/$1');
+$routes->post('/dev/updateCustomer/(:num)', 'CustomerController::updateCustomer/$1');
+$routes->get('/dev/deleteCustomer/(:num)', 'CustomerController::deleteCustomer/$1');
+
 
 /* manajemen pic */
 $routes->get('/dev/manajemenPIC', 'LoginController::pic');
