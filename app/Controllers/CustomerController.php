@@ -5,14 +5,17 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\M_Customer;
+use App\Models\M_Model;
 
 
 class CustomerController extends BaseController
 {
     protected $customerModel;
+    protected $modelModel;
     public function __construct()
     {
         $this->customerModel = new M_Customer();
+        $this->modelModel = new M_Model();
     }
 
     public function customer()
@@ -121,19 +124,27 @@ class CustomerController extends BaseController
         return redirect()->to('/dev/costumer');
     }
 
-    public function deleteCustomer($id)
+    public function delete($id)
     {
-        // Cek apakah data customer ada
-        $customer = $this->customerModel->find($id);
-        if (!$customer) {
-            session()->setFlashdata('error', 'Customer tidak ditemukan.');
-            return redirect()->to('/dev/costumer');
+        $customerModel = new M_Customer();
+        $modelModel = new M_Model();
+
+        // Periksa apakah ada data terkait di tabel model
+        $isRelated = $modelModel->where('customer_id', $id)->countAllResults();
+
+        if ($isRelated > 0) {
+            // Kirim pesan error ke view
+            return redirect()->to('/dev/costumer')->with('swal_error', 'Tidak dapat menghapus customer karena masih digunakan dalam model, Hapus data model terkait terlebih dahulu!');
         }
 
-        // Hapus data
-        $this->customerModel->delete($id);
-        session()->setFlashdata('pesan', 'Customer berhasil dihapus.');
-        return redirect()->to('/dev/costumer');
+        // Hapus data jika tidak ada relasi
+        $data = $customerModel->find($id);
+        if ($data) {
+            $customerModel->delete($id);
+            return redirect()->to('/dev/costumer')->with('swal_success', 'Data berhasil dihapus.');
+        } else {
+            return redirect()->to('/dev/costumer')->with('swal_error', 'Data tidak ditemukan.');
+        }
     }
 
     // End

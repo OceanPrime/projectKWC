@@ -53,58 +53,70 @@ class MonitoringController extends BaseController
         return view('development/monitoring/tambahMonitoring', $data);
     }
 
-
     public function saveMonitoring()
-    {
-        // Validasi input dari form
-        $validation = $this->validate([
-            'customer_id' => 'required',
-            'model_id'    => 'required', 
-            'pic_id'      => 'required', 
-            'start_plan'  => 'required|valid_date',
-            'finish_plan' => 'required|valid_date',
-        ]);
+{
+    // Ambil data utama
+    $customer_id = $this->request->getPost('customer_id');
+    $model_id = $this->request->getPost('model_id');
+    $die_go = $this->request->getPost('die_go');
 
-        if (!$validation) {
-            // Debugging: Lihat error jika validasi gagal
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
+    // Ambil array dari multiple input task PIC
+    $picIds = $this->request->getPost('pic_id');
+    $planStarts = $this->request->getPost('planStart');
+    $planFinishes = $this->request->getPost('planFinish');
 
-        // Ambil data pengguna berdasarkan pic_id
-        $picId = $this->request->getPost('pic_id');
-        $user = $this->ModelUser->find($picId);
-    
-        // Jika pengguna tidak ditemukan, kembalikan error
-        if (!$user) {
-            return redirect()->back()->withInput()->with('error', 'PIC tidak ditemukan.');
-        }
+    // Validasi utama
+    $validation = $this->validate([
+        'customer_id' => 'required',
+        'model_id'    => 'required',
+        'die_go'      => 'required|valid_date',
+    ]);
 
-        $taskName = $user['role'];
+    if (!$validation) {
+        return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+    }
 
-        // Ambil data dari form
-        $data = [
-            'customer_id'        => $this->request->getPost('customer_id'),
-            'model_id'           => $this->request->getPost('model_id'), // Sesuaikan
-            'pic_id'             => $this->request->getPost('pic_id'),   // Sesuaikan
-            'start_plan'         => $this->request->getPost('start_plan'),
-            'finish_plan'        => $this->request->getPost('finish_plan'),
-            'task_name'          => $taskName,
-            'status'             => $this->request->getPost('status') ?? 'PENDING',
-            'start_actual'       => $this->request->getPost('start_actual'),
-            'finish_actual'      => $this->request->getPost('finish_actual'),
-            'gap_sd'             => 0,
-            'gap_fd'             => 0,
-            'leap_time_planning' => 0,
-            'leap_time_actual'   => 0,
-        ];
+    // **Validasi setiap task (PIC)**
+    if (empty($picIds) || empty($planStarts) || empty($planFinishes)) {
+        return redirect()->back()->withInput()->with('swal_error', 'Minimal satu Task PIC harus diisi.');
+    }
 
-        // Simpan data ke database
-        if ($this->monitoringModel->save($data)) {
-            return redirect()->to('/dev/monitoring')->with('success', 'Task PIC berhasil ditambahkan.');
-        } else {
-            return redirect()->back()->withInput()->with('error', 'Gagal menambahkan Task PIC.');
+    foreach ($picIds as $index => $picId) {
+        if (empty($picId) || empty($planStarts[$index]) || empty($planFinishes[$index])) {
+            return redirect()->back()->withInput()->with('swal_error', 'Semua Task PIC harus memiliki PIC, Plan Start, dan Plan Finish.');
         }
     }
+
+    // **Simpan data task ke database**
+    foreach ($picIds as $index => $picId) {
+        // **Ambil role dari PIC**
+        $user = $this->ModelUser->find($picId);
+        $taskName = $user ? $user['role'] : 'UNKNOWN';
+
+        // **Hitung leap_time_planning (selisih hari antara start_plan dan finish_plan)**
+        $startDate = new \DateTime($planStarts[$index]);
+        $finishDate = new \DateTime($planFinishes[$index]);
+        $leapTimePlanning = $startDate->diff($finishDate)->days; // Hitung selisih hari
+
+        // Simpan ke database
+        $this->monitoringModel->save([
+            'customer_id'        => $customer_id,
+            'model_id'           => $model_id,
+            'pic_id'             => $picId,
+            'task_name'          => $taskName,
+            'start_plan'         => $planStarts[$index],
+            'finish_plan'        => $planFinishes[$index],
+            'status'             => 'PENDING',
+            'gap_sd'             => 0,
+            'gap_fd'             => 0,
+            'leap_time_planning' => $leapTimePlanning, // Tambahkan hasil perhitungan
+            'leap_time_actual'   => 0,
+        ]);
+    }
+
+    return redirect()->to('/dev/monitoring')->with('swal_success', 'Task PIC berhasil ditambahkan.');
+}
+
     public function getProjects($customerId)
     {
         $projects = $this->modelModel->where('customer_id', $customerId)->findAll();
@@ -119,7 +131,7 @@ class MonitoringController extends BaseController
 
     public function getPlanFinish($projectId)
     {
-        $project = $this->modelModel->select('id, plan_finish, die_go')->find($projectId);
+        $project = $this->modelModel->select('id, die_go')->find($projectId);
     
         if ($project) {
             return $this->response->setJSON($project);

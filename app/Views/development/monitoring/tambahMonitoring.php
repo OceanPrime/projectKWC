@@ -38,12 +38,13 @@
                         <div class="card-body">
                             <form class="form" action="/monitoring-save" method="post">
                                 <?= csrf_field(); ?>
+
+                                <!-- Form Input Utama -->
                                 <div class="row">
-                                    <!-- Dropdown Customer -->
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="customer-dropdown">Customer</label>
-                                            <select id="customer-dropdown" class="form-control" name="customer_id">
+                                            <select id="customer-dropdown" class="form-control" name="customer_id" required>
                                                 <option value="">-- Select Customer --</option>
                                                 <?php foreach ($customers as $customer): ?>
                                                     <option value="<?= $customer['customer_id']; ?>"><?= $customer['customer_name']; ?></option>
@@ -52,52 +53,64 @@
                                         </div>
                                     </div>
 
-                                    <!-- Dropdown Project -->
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="project-dropdown">Project</label>
-                                            <select id="project-dropdown" class="form-control" name="model_id" disabled>
+                                            <select id="project-dropdown" class="form-control" name="model_id" required>
                                                 <option value="">-- Select Project --</option>
                                             </select>
                                         </div>
                                     </div>
 
-
-                                    <!-- Date Input for DIE-GO -->
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="die_go">DIE-GO</label>
-                                            <input type="date" id="die_go" class="form-control" name="die_go" value="" readonly>
+                                            <input type="date" id="die_go" class="form-control" name="die_go" readonly>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="plan_finish">Maspro Date</label>
-                                            <input type="date" id="plan_finish" class="form-control" name="finish_plan" value="">
+                                            <input type="date" id="plan_finish" class="form-control" name="finish_plan" required>
                                         </div>
                                     </div>
+                                </div>
 
-                                                    
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-group">
-                                            <label for="customer-dropdown" for="defaultSelect">PIC</label>
-                                            <select id="customer-dropdown"  class="form-control" name="pic_id">
+                                <!-- Form Task PIC -->
+                                <h4 class="card-title mt-4">ADD TASK PIC</h4>
+                                <div id="taskPicContainer">
+                                    <!-- Task PIC Pertama -->
+                                    <div class="row mb-3 task-pic-item">
+                                        <div class="col-md-3">
+                                            <label>PIC</label>
+                                            <select class="form-control" name="pic_id[]" value="<?= old('user_id');?>" required>
                                                 <option value="">-- Select PIC --</option>
                                                 <?php foreach ($users as $user): ?>
-                                                    <option value="<?= $user['user_id']; ?>">
-                                                        <?= $user['nama'] . ' (' . $user['role'] . ')'; ?>
-                                                    </option>
+                                                    <option value="<?= $user['user_id']; ?>"><?= $user['nama'] . ' (' . $user['role'] . ')'; ?></option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
+                                        <div class="col-md-3">
+                                            <label>Plan Start</label>
+                                            <input type="date" class="form-control" name="planStart[]" value="<?= old('start_plan');?>" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Plan Finish</label>
+                                            <input type="date" class="form-control" name="planFinish[]" value="<?= old('finish_plan');?>" required>
+                                        </div>
                                     </div>
+                                </div>
 
-                                    <!-- Submit and Cancel Buttons -->
-                                    <div class="col-12 d-flex justify-content-start">
-                                        <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
-                                        <a href="<?= base_url('/dev/monitoring'); ?>" class="btn btn-danger me-1 mb-1">Cancel</a>
-                                    </div>
+                                <!-- Tombol Tambah Task PIC -->
+                                <button type="button" class="btn btn-primary" id="addTaskButton">
+                                    <i class="fa fa-plus"></i> Add TASK
+                                </button>
+
+                                <!-- Tombol Submit -->
+                                <div class="col-12 d-flex justify-content-start mt-3">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                    <a href="<?= base_url('/dev/monitoring'); ?>" class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>
                         </div>
@@ -105,70 +118,12 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">ADD TASK PIC</h4>
-                        </div>
-                        <div class="col-12 d-flex justify-content-end">
-                            <div class="container mt-4">
-                                <!-- Form pertama -->
-                                <form id="mainForm">
-                                    <div class="row mb-3">
-                                        <div class="form-group">
-                                            <div class="col-lg-14">
-                                                <label for="customer-dropdown">PIC</label>
-                                                <select id="customer-dropdown" class="form-control" name="pic_id">
-                                                    <option value="">-- Select PIC --</option>
-                                                    <?php foreach ($users as $user): ?>
-                                                        <option value="<?= $user['user_id']; ?>">
-                                                            <?= $user['nama'] . ' (' . $user['role'] . ')'; ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-lg-14">
-                                                <label for="planStart" class="form-label">Plan Start</label>
-                                                <input type="date" class="form-control" id="planStart" name="planStart[]">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-lg-14">
-                                                <label for="planFinish" class="form-label">Plan Finish</label>
-                                                <input type="date" class="form-control" id="planFinish" name="planFinish[]">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-lg-14">
-                                                <label for="taskPic" class="form-label">Task PIC</label>
-                                                <input type="text" class="form-control" id="taskPic" name="taskPic[]">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-
-                                <!-- Tempat form tambahan -->
-                                <div id="extraForms"></div>
-
-                                <!-- Tombol tambah form -->
-                                <div class="col-12 d-flex justify-content-end">
-                                    <button type="button" class="btn btn-primary me-1 mb-1" id="addFormButton">
-                                        <i class="fa fa-plus"></i> Add TASK
-                                    </button>
-                                    <a href="<?= base_url('/dev/monitoring'); ?>" class="btn btn-danger me-1 mb-1">Cancel</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>
 
+<!--DROPDOWN & INPUT OTOMATIS SESUAI DATA DIPILIH-->
 <script>
     $(document).ready(function() {
         // Synchronize Plan Start with Die Go
@@ -179,7 +134,10 @@
 
         // Load projects when a customer is selected
         $('#customer-dropdown').change(function() {
-            var customerId = $(this).val();
+        var customerId = $(this).val();
+
+        // Reset dropdown project setiap kali customer berubah
+        $('#project-dropdown').empty().append('<option value="">-- Select Project --</option>').prop('disabled', true);
 
             if (customerId) {
                 // Fetch projects for selected customer
@@ -257,47 +215,59 @@
     });
 </script>
 
+<!--GENERATE FORM-->
 <script>
-    document.getElementById("addFormButton").addEventListener("click", function() {
-        // Elemen form baru
-        const newForm = `
-                                    <div class="row mb-3">
-                                        <div class="form-group">
-                                            <label for="customer-dropdown">PIC</label>
-                                            <select id="customer-dropdown" class="form-control" name="pic_id">
-                                                <option value="">-- Select PIC --</option>
-                                                <?php foreach ($users as $user): ?>
-                                                    <option value="<?= $user['user_id']; ?>">
-                                                        <?= $user['nama'] . ' (' . $user['role'] . ')'; ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-lg-14">
-                                                <label for="planStart" class="form-label">Plan Start</label>
-                                                <input type="date" class="form-control" id="planStart" name="planStart[]">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-lg-14">
-                                                <label for="planFinish" class="form-label">Plan Finish</label>
-                                                <input type="date" class="form-control" id="planFinish" name="planFinish[]">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-lg-14">
-                                                <label for="taskPic" class="form-label">Task PIC</label>
-                                                <input type="text" class="form-control" id="taskPic" name="taskPic[]">
-                                            </div>
-                                        </div>
-                                    </div>
-                
-        `;
+    document.getElementById("addTaskButton").addEventListener("click", function() {
+    const taskContainer = document.getElementById("taskPicContainer");
 
-        // Tambahkan form baru ke container
-        document.getElementById("extraForms").insertAdjacentHTML("beforeend", newForm);
+    // Ambil nilai dari form utama
+    const customerId = document.getElementById("customer-dropdown").value;
+    const projectId = document.getElementById("project-dropdown").value;
+    const dieGo = document.getElementById("die_go").value;
+    const masproDate = document.getElementById("plan_finish").value;
+
+    if (!customerId || !projectId || !dieGo || !masproDate) {
+        alert("Harap lengkapi data utama sebelum menambahkan Task PIC.");
+        return;
+    }
+
+    // Template task PIC dengan tombol remove
+    const newTask = document.createElement("div");
+    newTask.classList.add("row", "mb-3", "task-pic-item");
+    newTask.innerHTML = `
+        <div class="col-md-3">
+            <label>PIC</label>
+            <select class="form-control" name="pic_id[]" value="<?= old('user_id');?>" required>
+                <option value="">-- Select PIC --</option>
+                <?php foreach ($users as $user): ?>
+                    <option value="<?= $user['user_id']; ?>"><?= $user['nama'] . ' (' . $user['role'] . ')'; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Plan Start</label>
+            <input type="date" class="form-control" name="planStart[]" value="<?= old('start_plan');?>" required>
+        </div>
+        <div class="col-md-3">
+            <label>Plan Finish</label>
+            <input type="date" class="form-control" name="planFinish[]" value="<?= old('finish_plan');?>" required>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="button" class="btn btn-danger removeTaskButton">
+                <i class="fa fa-trash"></i> Remove
+            </button>
+        </div>
+    `;
+
+    // Tambahkan ke dalam container
+    taskContainer.appendChild(newTask);
+
+    // Event listener untuk hapus task
+    newTask.querySelector(".removeTaskButton").addEventListener("click", function() {
+        newTask.remove();
     });
+});
+
 </script>
 
 <?= $this->endSection(); ?>

@@ -28,6 +28,7 @@ $routes->get('/dev/model', 'ModelController::model');
 $routes->get('/dev/model-tambah', 'ModelController::tambahModel');
 $routes->post('/model-save', 'ModelController::save');
 $routes->get('/dev/model-edit', 'ModelController::editModel');
+$routes->get('/Model/delete/(:num)', 'ModelController::delete/$1');
 
 /*Customer*/
 $routes->get('/dev/costumer', 'CustomerController::customer');
@@ -35,7 +36,7 @@ $routes->get('/dev/costumer-tambah', 'CustomerController::tambahCustomer');
 $routes->post('/Customer-save', 'CustomerController::save');
 $routes->get('/dev/costumer-edit/(:num)', 'CustomerController::editCustomer/$1');
 $routes->post('/dev/updateCustomer/(:num)', 'CustomerController::updateCustomer/$1');
-$routes->get('/dev/deleteCustomer/(:num)', 'CustomerController::deleteCustomer/$1');
+$routes->get('/Customer/delete/(:num)', 'CustomerController::delete/$1');
 
 
 /* manajemen pic */
@@ -45,6 +46,7 @@ $routes->get('/dev/tambahPIC', 'LoginController::tambahPIC');
 $routes->post('/PIC-save', 'LoginController::savePic');
 $routes->post('dev/updatePIC/(:num)', 'LoginController::updatePIC/$1');
 $routes->get('dev/editPIC/(:num)', 'LoginController::editPIC/$1');
+$routes->get('/account/delete/(:num)', 'LoginController::delete/$1');
 
 
 

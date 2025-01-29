@@ -19,6 +19,23 @@
                     </li>
                 </ul>
             </div>
+            <script>
+                <?php if (session()->has('swal_error')): ?>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: '<?= session('swal_error'); ?>',
+                    });
+                <?php endif; ?>
+
+                <?php if (session()->has('swal_success')): ?>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: '<?= session('swal_success'); ?>',
+                    });
+                <?php endif; ?>
+            </script>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -76,8 +93,11 @@
                                                             <i class="fa fa-edit"></i>
                                                         </button>
                                                     </a>
-                                                    <a href="" onclick="return confirm('Apakah yakin dihapus data ?')"
-                                                        type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-danger" data-original-title="Remove">
+                                                    <a href="javascript:void(0);" 
+                                                        data-url="<?= base_url('/Model/delete/' . $k['id']); ?>" 
+                                                        class="btn btn-link btn-simple-danger delete-button" 
+                                                        data-toggle="tooltip" 
+                                                        title="Hapus Data">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </div>
@@ -121,4 +141,32 @@
         </div>
     </footer>
 </div>
+<script>
+    // Tangkap event klik pada tombol dengan class `delete-button`
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-button');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const deleteUrl = this.getAttribute('data-url'); // Ambil URL dari atribut data-url
+
+                Swal.fire({
+                    title: 'Apakah yakin ingin menghapus data ini?',
+                    text: "Data yang sudah dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect ke URL penghapusan
+                        window.location.href = deleteUrl;
+                    }
+                });
+            });
+        });
+    });
+</script>
 <?= $this->endSection(); ?>

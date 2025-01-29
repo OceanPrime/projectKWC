@@ -19,6 +19,23 @@
 					</li>
 				</ul>
 			</div>
+			<script>
+                <?php if (session()->has('swal_error')): ?>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: '<?= session('swal_error'); ?>',
+                    });
+                <?php endif; ?>
+
+                <?php if (session()->has('swal_success')): ?>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: '<?= session('swal_success'); ?>',
+                    });
+                <?php endif; ?>
+            </script>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="card">

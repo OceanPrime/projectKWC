@@ -5,13 +5,16 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\M_User;
+use App\Models\M_Monitoring;
 
 class LoginController extends BaseController
 {
     protected $UserModel;
+    protected $MonitoringModel;
     public function __construct()
     {
         $this->UserModel = new M_User();
+        $this->MonitoringModel = new M_Monitoring();
     }
 
     public function index()
@@ -265,6 +268,29 @@ class LoginController extends BaseController
         $UserModel->update($user_id, $data);
         session()->setFlashdata('pesan', 'Data user berhasil diubah.');
         return redirect()->to('/dev/manajemenPIC');
+    }
+
+    public function delete($user_id)
+    {
+        $UserModel = new M_User();
+        $MonitoringModel = new M_Monitoring();
+
+        // Periksa apakah ada data terkait di tabel monitoring
+        $isRelated = $MonitoringModel->where('pic_id', $user_id)->countAllResults();
+
+        if ($isRelated > 0) {
+            // Kirim pesan error ke view
+            return redirect()->to('/dev/manajemenPIC')->with('swal_error', 'Tidak dapat menghapus user karena masih digunakan dalam monitoring, Hapus data monitoring terkait terlebih dahulu!');
+        }
+
+        // Hapus data jika tidak ada relasi
+        $data = $UserModel->find($user_id);
+        if ($data) {
+            $UserModel->delete($user_id);
+            return redirect()->to('/dev/manajemenPIC')->with('swal_success', 'Data berhasil dihapus.');
+        } else {
+            return redirect()->to('/dev/manajemenPIC')->with('swal_error', 'Data tidak ditemukan.');
+        }
     }
 
 

@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\M_Model;
 use App\Models\M_Customer;
+use App\Models\M_Monitoring;
 
 class ModelController extends BaseController
 {
@@ -17,6 +18,8 @@ class ModelController extends BaseController
 
         $this->M_Model = new M_Model();
         $this->M_Customer = new M_Customer();
+        $this->MonitoringModel = new M_Monitoring();
+
     }
 
     public function model()
@@ -98,12 +101,6 @@ class ModelController extends BaseController
                     'required' => '{field} Harus diisi'
                 ]
             ],
-            'plan_finish' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => '{field} Harus diisi'
-                ]
-            ],
         ])) {
             return redirect()->to('/dev/model-tambah')->withInput();
         }
@@ -122,7 +119,6 @@ class ModelController extends BaseController
             'jenis' => $this->request->getVar('jenis'),
             'status' => $this->request->getVar('status'),
             'die_go' => $this->request->getVar('die_go'),
-            'plan_finish' => $this->request->getVar('plan_finish'),
             'plan_mp' => $this->request->getVar('plan_mp'),
 
         ]);
@@ -139,5 +135,28 @@ class ModelController extends BaseController
     {
         $data['title'] = 'Edit Model';
         return view('development/model/editModel', $data);
+    }
+
+    public function delete($id)
+    {
+        $modelModel = new M_Model();
+        $MonitoringModel = new M_Monitoring();
+
+        // Periksa apakah ada data terkait di tabel monitoring
+        $isRelated = $MonitoringModel->where('model_id', $id)->countAllResults();
+
+        if ($isRelated > 0) {
+            // Kirim pesan error ke view
+            return redirect()->to('/dev/model')->with('swal_error', 'Tidak dapat menghapus model karena masih digunakan dalam monitoring, Hapus data monitoring terkait terlebih dahulu!');
+        }
+
+        // Hapus data jika tidak ada relasi
+        $data = $modelModel->find($id);
+        if ($data) {
+            $modelModel->delete($id);
+            return redirect()->to('/dev/model')->with('swal_success', 'Data berhasil dihapus.');
+        } else {
+            return redirect()->to('/dev/model')->with('swal_error', 'Data tidak ditemukan.');
+        }
     }
 }
