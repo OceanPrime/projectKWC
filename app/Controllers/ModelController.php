@@ -10,24 +10,28 @@ use App\Models\M_Monitoring;
 
 class ModelController extends BaseController
 {
-
     protected $M_Model;
     protected $M_Customer;
     public function __construct()
     {
-
         $this->M_Model = new M_Model();
         $this->M_Customer = new M_Customer();
         $this->MonitoringModel = new M_Monitoring();
-
     }
 
     public function model()
     {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
         $data = [
             'title' => 'Model Data',
             'validation' => \Config\Services::validation(),
-            'model' => $this->M_Model->getModel()
+            'model' => $this->M_Model->getModel(),
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
         ];
         return view('development/model/index', $data);
     }
@@ -35,10 +39,17 @@ class ModelController extends BaseController
 
     public function tambahModel()
     {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
         $data = [
             'title' => 'Tambah Model',
             'validation' => \Config\Services::validation(),
-            'customers' => $this->M_Customer->findAll()
+            'customers' => $this->M_Customer->findAll(),
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
         ];
         return view('development/model/tambahModel', $data);
     }
@@ -131,11 +142,82 @@ class ModelController extends BaseController
         return redirect()->to('/dev/model');
     }
 
-    public function editModel()
+    public function editModel($id)
     {
-        $data['title'] = 'Edit Model';
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
+        $model = new M_Model();
+        $customerModel = new M_Customer();
+
+        $data = [
+            'title' => 'Edit Model',
+            'validation' => \Config\Services::validation(),
+            'customers' => $customerModel->findAll(),
+            'model' => $model->find($id),
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
+        ];
         return view('development/model/editModel', $data);
     }
+
+    public function updateModel($id)
+    {
+        $modelBaru = new M_Model();
+        $modelLama = $modelBaru->find($id);
+
+        // Validasi data yang dikirimkan dari form
+        if (!$this->validate([
+            'model_name' => [
+                'rules' => "required|is_unique[models.model_name,id,{$id}]",
+                'errors' => [
+                    'required' => 'Model harus diisi!',
+                    'is_unique' => 'Model sudah ada.'
+                ]
+            ],
+            'customer_id' => 'required',
+            'size' => 'required',
+            'product' => 'required',
+            'material' => 'required',
+            'jenis' => 'required',
+            'status' => 'required',
+            'die_go' => 'required|valid_date',
+            'plan_mp' => 'required|valid_date',
+        ])) {
+            return redirect()->back()->withInput()->with('validation', \Config\Services::validation());
+        }
+
+        // Ambil nama customer berdasarkan customer_id
+        $customer_id = $this->request->getVar('customer_id');
+        $customer = $this->M_Customer->find($customer_id);
+
+        if (!$customer) {
+            session()->setFlashdata('error', 'Customer tidak ditemukan.');
+            return redirect()->back();
+        }
+
+
+        // Update data model
+        $modelBaru->update($id, [
+            'model_name' => $this->request->getVar('model_name'),
+            'customer_id' => $customer_id,
+            'customer_name' => $customer['customer_name'],
+            'size' => $this->request->getVar('size'),
+            'product' => $this->request->getVar('product'),
+            'material' => $this->request->getVar('material'),
+            'jenis' => $this->request->getVar('jenis'),
+            'status' => $this->request->getVar('status'),
+            'die_go' => $this->request->getVar('die_go'),
+            'plan_mp' => $this->request->getVar('plan_mp'),
+        ]);
+
+        session()->setFlashdata('swal_success', 'Data model berhasil diupdate.');
+        return redirect()->to('/dev/model');
+    }
+
+
 
     public function delete($id)
     {

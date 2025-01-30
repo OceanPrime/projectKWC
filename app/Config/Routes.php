@@ -27,7 +27,8 @@ $routes->get('monitoring/getPlanFinish/(:num)', 'MonitoringController::getPlanFi
 $routes->get('/dev/model', 'ModelController::model');
 $routes->get('/dev/model-tambah', 'ModelController::tambahModel');
 $routes->post('/model-save', 'ModelController::save');
-$routes->get('/dev/model-edit', 'ModelController::editModel');
+$routes->get('/dev/model-edit/(:num)', 'ModelController::editModel/$1');
+$routes->post('/dev/model-update/(:num)', 'ModelController::updateModel/$1');
 $routes->get('/Model/delete/(:num)', 'ModelController::delete/$1');
 
 /*Customer*/

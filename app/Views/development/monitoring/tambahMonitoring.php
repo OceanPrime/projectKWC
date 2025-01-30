@@ -78,13 +78,15 @@
                                 </div>
 
                                 <!-- Form Task PIC -->
-                                <h4 class="card-title mt-4">ADD TASK PIC</h4>
+                                <div class="card-header">
+                                    <h4 class="card-title mt-4">ADD TASK PIC</h4>
+                                </div>
                                 <div id="taskPicContainer">
                                     <!-- Task PIC Pertama -->
                                     <div class="row mb-3 task-pic-item">
                                         <div class="col-md-3">
                                             <label>PIC</label>
-                                            <select class="form-control" name="pic_id[]" value="<?= old('user_id');?>" required>
+                                            <select class="form-control" name="pic_id[]" value="<?= old('user_id'); ?>" required>
                                                 <option value="">-- Select PIC --</option>
                                                 <?php foreach ($users as $user): ?>
                                                     <option value="<?= $user['user_id']; ?>"><?= $user['nama'] . ' (' . $user['role'] . ')'; ?></option>
@@ -93,20 +95,21 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label>Plan Start</label>
-                                            <input type="date" class="form-control" name="planStart[]" value="<?= old('start_plan');?>" required>
+                                            <input type="date" class="form-control" name="planStart[]" value="<?= old('start_plan'); ?>" required>
                                         </div>
                                         <div class="col-md-3">
                                             <label>Plan Finish</label>
-                                            <input type="date" class="form-control" name="planFinish[]" value="<?= old('finish_plan');?>" required>
+                                            <input type="date" class="form-control" name="planFinish[]" value="<?= old('finish_plan'); ?>" required>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Tombol Tambah Task PIC -->
-                                <button type="button" class="btn btn-primary" id="addTaskButton">
-                                    <i class="fa fa-plus"></i> Add TASK
-                                </button>
-
+                                <div class="col-12 d-flex justify-content-end mt-3">
+                                    <button type="button" class="btn btn-primary" id="addTaskButton">
+                                        <i class="fa fa-plus"></i> Add TASK
+                                    </button>
+                                </div>
                                 <!-- Tombol Submit -->
                                 <div class="col-12 d-flex justify-content-start mt-3">
                                     <button type="submit" class="btn btn-success">Submit</button>
@@ -117,8 +120,6 @@
                     </div>
                 </div>
             </div>
-
-            
         </div>
     </div>
 </div>
@@ -134,10 +135,10 @@
 
         // Load projects when a customer is selected
         $('#customer-dropdown').change(function() {
-        var customerId = $(this).val();
+            var customerId = $(this).val();
 
-        // Reset dropdown project setiap kali customer berubah
-        $('#project-dropdown').empty().append('<option value="">-- Select Project --</option>').prop('disabled', true);
+            // Reset dropdown project setiap kali customer berubah
+            $('#project-dropdown').empty().append('<option value="">-- Select Project --</option>').prop('disabled', true);
 
             if (customerId) {
                 // Fetch projects for selected customer
@@ -218,26 +219,26 @@
 <!--GENERATE FORM-->
 <script>
     document.getElementById("addTaskButton").addEventListener("click", function() {
-    const taskContainer = document.getElementById("taskPicContainer");
+        const taskContainer = document.getElementById("taskPicContainer");
 
-    // Ambil nilai dari form utama
-    const customerId = document.getElementById("customer-dropdown").value;
-    const projectId = document.getElementById("project-dropdown").value;
-    const dieGo = document.getElementById("die_go").value;
-    const masproDate = document.getElementById("plan_finish").value;
+        // Ambil nilai dari form utama
+        const customerId = document.getElementById("customer-dropdown").value;
+        const projectId = document.getElementById("project-dropdown").value;
+        const dieGo = document.getElementById("die_go").value;
+        const masproDate = document.getElementById("plan_finish").value;
 
-    if (!customerId || !projectId || !dieGo || !masproDate) {
-        alert("Harap lengkapi data utama sebelum menambahkan Task PIC.");
-        return;
-    }
+        if (!customerId || !projectId || !dieGo || !masproDate) {
+            alert("Harap lengkapi data utama sebelum menambahkan Task PIC.");
+            return;
+        }
 
-    // Template task PIC dengan tombol remove
-    const newTask = document.createElement("div");
-    newTask.classList.add("row", "mb-3", "task-pic-item");
-    newTask.innerHTML = `
+        // Template task PIC dengan tombol remove
+        const newTask = document.createElement("div");
+        newTask.classList.add("row", "mb-3", "task-pic-item");
+        newTask.innerHTML = `
         <div class="col-md-3">
             <label>PIC</label>
-            <select class="form-control" name="pic_id[]" value="<?= old('user_id');?>" required>
+            <select class="form-control" name="pic_id[]" value="<?= old('user_id'); ?>" required>
                 <option value="">-- Select PIC --</option>
                 <?php foreach ($users as $user): ?>
                     <option value="<?= $user['user_id']; ?>"><?= $user['nama'] . ' (' . $user['role'] . ')'; ?></option>
@@ -246,11 +247,11 @@
         </div>
         <div class="col-md-3">
             <label>Plan Start</label>
-            <input type="date" class="form-control" name="planStart[]" value="<?= old('start_plan');?>" required>
+            <input type="date" class="form-control" name="planStart[]" value="<?= old('start_plan'); ?>" required>
         </div>
         <div class="col-md-3">
             <label>Plan Finish</label>
-            <input type="date" class="form-control" name="planFinish[]" value="<?= old('finish_plan');?>" required>
+            <input type="date" class="form-control" name="planFinish[]" value="<?= old('finish_plan'); ?>" required>
         </div>
         <div class="col-md-3 d-flex align-items-end">
             <button type="button" class="btn btn-danger removeTaskButton">
@@ -259,15 +260,14 @@
         </div>
     `;
 
-    // Tambahkan ke dalam container
-    taskContainer.appendChild(newTask);
+        // Tambahkan ke dalam container
+        taskContainer.appendChild(newTask);
 
-    // Event listener untuk hapus task
-    newTask.querySelector(".removeTaskButton").addEventListener("click", function() {
-        newTask.remove();
+        // Event listener untuk hapus task
+        newTask.querySelector(".removeTaskButton").addEventListener("click", function() {
+            newTask.remove();
+        });
     });
-});
-
 </script>
 
 <?= $this->endSection(); ?>

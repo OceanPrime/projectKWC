@@ -24,18 +24,38 @@ class MonitoringController extends BaseController
 
     public function index()
     {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+        
+        $data = [
+            'nama' => $session->get('nama'), 
+            'role' => $session->get('role'),
+        ];
+
         $data['customers'] = $this->modelModel->select('customer_id, customer_name')->distinct()->findAll();
         $data['jenis'] = $this->modelModel->distinct()->findColumn('jenis');
-        $data['title'] = 'Model Data';
+        $data['title'] = 'Monitoring Data';
 
         return view('development/monitoring/index', $data);
     }   
 
     public function tambahMonitoring()
     {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+        
+        $data = [
+            'nama' => $session->get('nama'), 
+            'role' => $session->get('role'),
+        ];
+
         $data['users'] = $this->ModelUser
             ->select('user_id, role, nama')
-            ->notLike('role', 'admin')// Kecualikan role admin
+            ->notLike('role', 'Development')// Kecualikan role Development
             ->distinct()
             ->findAll();
 

@@ -146,8 +146,8 @@
 						<div class="info">
 							<a data-toggle="collapse" href="<?= base_url(); ?>#collapseExample" aria-expanded="true">
 								<span>
-									Hizrian
-									<span class="user-level">Administrator</span>
+									<?= esc($nama); ?>
+									<span class="user-level"><?= esc($role); ?></span>
 								</span>
 							</a>
 						</div>

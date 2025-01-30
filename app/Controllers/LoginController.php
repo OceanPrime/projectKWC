@@ -42,7 +42,7 @@ class LoginController extends BaseController
                     'logged_in' => true,
                 ]);
 
-                if ($user['role'] == 'admin') {
+                if ($user['role'] == 'Development') {
                     return redirect()->to('/dev/dashboard');
                 } elseif ($user['role'] == 'ReDrawing') {
                     return redirect()->to('/PIC/ReDrawing');
@@ -106,30 +106,51 @@ class LoginController extends BaseController
     // Manajemen Akun PIC
     public function pic()
     {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
         $data = [
             'title' => 'Data akun',
-            'Usermodel' => $this->UserModel->getUser()
+            'Usermodel' => $this->UserModel->getUser(),
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
         ];
         return view('development/manajemenAkun/index', $data);
     }
 
     public function tambahPIC()
     {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
         $UserModel = new M_User();
         $data = [
             'title' => 'Tambah Akun',
             'validation' => \Config\Services::validation(),
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
         ];
         return view('development/manajemenAkun/tambahPIC', $data);
     }
 
     public function editPIC($user_id)
     {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
         $UserModel = new M_User();
         $data = [
             'user' => $UserModel->find($user_id),
             'title' => 'Edit Akun',
             'validation' => \Config\Services::validation(),
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
         ];
         return view('development/manajemenAkun/editPIC', $data);
     }

@@ -26,39 +26,43 @@
                             <h4 class="card-title">Update Model</h4>
                         </div>
                         <div class="card-body">
-                            <form class="form" action="" method="post">
+                            <form class="form" action="<?= base_url('/dev/model-update/' . $model['id']) ?>" method="post">
+                                <?= csrf_field(); ?>
                                 <div class="row">
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="size">Size</label>
-                                            <input type="text" id="size" class="form-control" autofocus name="size" value="">
+                                            <input type="text" id="size" class="form-control" autofocus name="size" value="<?= $model['size'] ?? '' ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="product">Product</label>
                                         </div>
-                                       
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="material">Material</label>
                                             <input type="text" id="material" class="form-control" name="material" value="">
                                         </div>
-                                       
+
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="jenis">Jenis</label>
                                             <input type="text" id="jenis" class="form-control" name="jenis" value="">
                                         </div>
-                                        
+
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="customer_id">Customer</label>
                                             <select class="form-control" id="customer_id" name="customer_id" required>
-                                                <option selected disabled>--Pilih Customer--</option>
+                                                <?php foreach ($customers as $customer): ?>
+                                                    <option value="<?= $customer['id'] ?>" <?= ($customer['id'] == $model['customer_id']) ? 'selected' : '' ?>>
+                                                        <?= $customer['customer_name'] ?>
+                                                    </option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -77,29 +81,29 @@
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="plan_mp">PLAN M/P</label>
-                                            <input type="date" id="plan_mp" class="form-control"  name="plan_mp" value="">
+                                            <input type="date" id="plan_mp" class="form-control" name="plan_mp" value="">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="plan_finish">PLAN FINISH</label>
-                                            <input type="date" id="plan_finish" class="form-control"  name="plan_finish" value="">
+                                            <input type="date" id="plan_finish" class="form-control" name="plan_finish" value="">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="status">STATUS</label>
-                                            <select class="form-control" name="status" id="status" >
-                                            <option selected disabled>--Pilih--</option>
-                                                <option>COMPLETED</option>
-                                                <option>ON PROGRESS</option>
+                                            <select class="form-control" name="status" id="status">
+                                                <option selected disabled>--Pilih--</option>
+                                                <option value="COMPLETED" <?= ($model['status'] === 'COMPLETED') ? 'selected' : '' ?>>COMPLETED</option>
+                                                <option value="ON PROGRESS" <?= ($model['status'] === 'ON PROGRESS') ? 'selected' : '' ?>>ON PROGRESS</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex justify-content-start">
                                         <button type="submit"
                                             class="btn btn-primary me-1 mb-1">Update</button>
-                                        <a href="<?=base_url('/dev/model'); ?>" class="btn btn-danger me-1 mb-1">
+                                        <a href="<?= base_url('/dev/model'); ?>" class="btn btn-danger me-1 mb-1">
                                             Cancel
                                         </a>
                                     </div>
@@ -111,31 +115,5 @@
             </div>
         </div>
     </div>
-    <footer class="footer">
-        <div class="container-fluid">
-            <nav class="pull-left">
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://www.themekita.com">
-                            ThemeKita
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Help
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Licenses
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="copyright ml-auto">
-                2018, made with <i class="fa fa-heart heart text-danger"></i> by <a href="https://www.themekita.com">ThemeKita</a>
-            </div>
-        </div>
-    </footer>
 </div>
 <?= $this->endSection(); ?>

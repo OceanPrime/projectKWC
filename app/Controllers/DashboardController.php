@@ -10,12 +10,14 @@ class DashboardController extends BaseController
     public function index()//admin
     {
         $session = session();
-        if ($session->get('role') !== 'admin') {
+        if ($session->get('role') !== 'Development') {
             return redirect()->to('/');
         }
 
         $data = [
             'title' => 'Dashboard',
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
         ];
         return view('development/dashboard', $data);
     }

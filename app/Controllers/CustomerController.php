@@ -20,19 +20,35 @@ class CustomerController extends BaseController
 
     public function customer()
     {
+        
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
+
         $data = [
             'title' => 'Tambah Customer',
             'validation' => \Config\Services::validation(),
-            'customer' => $this->customerModel->getCustomer()
+            'customer' => $this->customerModel->getCustomer(),
+            'nama' => $session->get('nama'), 
+            'role' => $session->get('role'),
         ];
         return view('development/costumer/index', $data);
     }
 
     public function tambahCustomer()
     {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
         $data = [
             'title' => 'Tambah Customer',
-            'validation' => \Config\Services::validation()
+            'validation' => \Config\Services::validation(),
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
         ];
         return view('development/costumer/tambahCostumer', $data);
     }
@@ -71,18 +87,24 @@ class CustomerController extends BaseController
             'customer_name' => $customerName
         ]);
 
-        session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
-        return redirect()->to('/dev/costumer');
+        return redirect()->to('/dev/costumer')->with('swal_success', 'Data Customer berhasil ditambahkan.');
     }
 
     // Backend edit Customer
     public function editCustomer($id)
     {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
         $customerModel = new M_Customer();
         $data = [
             'title' => 'Update Customer',
             'validation' => \Config\Services::validation(),
             'customer' => $customerModel->find($id),
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
         ];
         return view('development/costumer/editCostumer', $data);
     }
@@ -120,8 +142,7 @@ class CustomerController extends BaseController
             'customer_name' => $customerName
         ]);
 
-        session()->setFlashdata('pesan', 'Data customer berhasil diupdate.');
-        return redirect()->to('/dev/costumer');
+        return redirect()->to('/dev/costumer')->with('swal_success', 'Data Customer berhasil diupdate.');
     }
 
     public function delete($id)
@@ -141,9 +162,9 @@ class CustomerController extends BaseController
         $data = $customerModel->find($id);
         if ($data) {
             $customerModel->delete($id);
-            return redirect()->to('/dev/costumer')->with('swal_success', 'Data berhasil dihapus.');
+            return redirect()->to('/dev/costumer')->with('swal_success', 'Data Customer berhasil dihapus.');
         } else {
-            return redirect()->to('/dev/costumer')->with('swal_error', 'Data tidak ditemukan.');
+            return redirect()->to('/dev/costumer')->with('swal_error', 'Data Customer tidak ditemukan.');
         }
     }
 

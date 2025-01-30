@@ -10,7 +10,6 @@ class M_User extends Model
     protected $primaryKey = "user_id";
     protected $allowedFields = ['username','nama','no_hp', 'password', 'role'];
 
-
     public function getUser($user_id = false)
     {
          if ($user_id === false) {
