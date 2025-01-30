@@ -38,26 +38,27 @@
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="product">Product</label>
+                                            <input type="text" id="product" class="form-control" name="product" value="<?= $model['product'] ?? '' ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="material">Material</label>
-                                            <input type="text" id="material" class="form-control" name="material" value="">
+                                            <input type="text" id="material" class="form-control" name="material" value="<?= $model['material'] ?? '' ?>">
                                         </div>
 
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="jenis">Jenis</label>
-                                            <input type="text" id="jenis" class="form-control" name="jenis" value="">
+                                            <input type="text" id="jenis" class="form-control" name="jenis" value="<?= $model['jenis'] ?? '' ?>">
                                         </div>
 
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="customer_id">Customer</label>
-                                            <select class="form-control" id="customer_id" name="customer_id" required>
+                                            <select class="form-control" id="customer_id" name="customer_id" value="<?= $model['customer_name'] ?? '' ?>" required>
                                                 <?php foreach ($customers as $customer): ?>
                                                     <option value="<?= $customer['id'] ?>" <?= ($customer['id'] == $model['customer_id']) ? 'selected' : '' ?>>
                                                         <?= $customer['customer_name'] ?>
@@ -69,31 +70,25 @@
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="die_go">DIE-GO</label>
-                                            <input type="date" id="die_go" class="form-control" name="die_go" value="">
+                                            <input type="date" id="die_go" class="form-control" name="die_go" value="<?= $model['die_go'] ?? '' ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="model_name">Model</label>
-                                            <input type="text" id="model_name" class="form-control" name="model_name" value="">
+                                            <input type="text" id="model_name" class="form-control" name="model_name" value="<?= $model['model_name'] ?? '' ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="plan_mp">PLAN M/P</label>
-                                            <input type="date" id="plan_mp" class="form-control" name="plan_mp" value="">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-group">
-                                            <label for="plan_finish">PLAN FINISH</label>
-                                            <input type="date" id="plan_finish" class="form-control" name="plan_finish" value="">
+                                            <input type="date" id="plan_mp" class="form-control" name="plan_mp" value="<?= $model['plan_mp'] ?? '' ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="status">STATUS</label>
-                                            <select class="form-control" name="status" id="status">
+                                            <select class="form-control" name="status" id="status" value="<?= $model['status'] ?? '' ?>" >
                                                 <option selected disabled>--Pilih--</option>
                                                 <option value="COMPLETED" <?= ($model['status'] === 'COMPLETED') ? 'selected' : '' ?>>COMPLETED</option>
                                                 <option value="ON PROGRESS" <?= ($model['status'] === 'ON PROGRESS') ? 'selected' : '' ?>>ON PROGRESS</option>

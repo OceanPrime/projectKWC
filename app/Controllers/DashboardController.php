@@ -30,7 +30,7 @@ class DashboardController extends BaseController
             return redirect()->to('/');
         } 
         
-        return view('PIC/ReDrawing/dashboard');
+        return view('PIC/ReDrawing/index');
     }
 
     public function ApprovalReDraw()

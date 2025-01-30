@@ -91,7 +91,8 @@ class LoginController extends BaseController
                     return redirect()->to('/belum ada'); //vbelum
                 } else {
                     // Masih dalam pengembangan
-                    return redirect()->to('/login');
+                    session()->setFlashdata('error', 'Gagal Login, Role tidak ditemukan');
+                    return redirect()->to('/');
                 }
             } else {
                 session()->setFlashdata('error', 'Password salah!');
