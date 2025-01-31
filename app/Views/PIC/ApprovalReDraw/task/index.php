@@ -1,5 +1,5 @@
 <?= $this->extend('PIC/layout/template'); ?>
-<?= $this->section('content'); ?>
+<?= $this->section('contentApproval'); ?>
 <div class="main-panel">
     <div class="content">
         <div class="page-inner">
@@ -26,14 +26,6 @@
                             <h4 class="card-title">Monitoring Data</h4>
                         </div>
                         <div class="card-body">
-                            <a href="<?=base_url('/dev/model-tambah'); ?>">
-                                <button class="btn btn-primary rounded-pill">
-                                    <i class="fa fa-plus"></i>
-                                    Add Model
-                                </button>
-                            </a>
-                        </div>
-                        <div class="card-body">
                             <div class="table-responsive">
                                 <table id="basic-datatables" class="display table table-striped table-hover">
                                     <thead>
@@ -55,12 +47,21 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            
-                                            <td></td>
-
+                                            <td>1</td>
+                                            <td>Mobil</td>
+                                            <td>Raven</td>
+                                            <td>10cm</td>
+                                            <td>Japan</td>
+                                            <td>Besi</td>
+                                            <td>Roda 4</td>
+                                            <td>ON - PROGRESS</td>
+                                            <td>15 januari 2025</td>
+                                            <td>20 maret 2026</td>
+                                            <td>10</td>
+                                            <td>11</td>
                                             <td>
                                                 <div class="form-button-action">
-                                                    <a href="<?=base_url('/dev/model-edit'); ?>">
+                                                    <a href="<?= base_url('/PIC/ApprovalRedraw-edit') ?>">
                                                         <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-primary" data-original-title="Edit Task">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
@@ -72,37 +73,10 @@
                                 </table>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <footer class="footer">
-        <div class="container-fluid">
-            <nav class="pull-left">
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://www.themekita.com">
-                            ThemeKita
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Help
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Licenses
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="copyright ml-auto">
-                2018, made with <i class="fa fa-heart heart text-danger"></i> by <a href="https://www.themekita.com">ThemeKita</a>
-            </div>
-        </div>
-    </footer>
 </div>
 <?= $this->endSection(); ?>

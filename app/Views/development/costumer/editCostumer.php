@@ -15,7 +15,7 @@
                         <i class="flaticon-right-arrow"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Update costumer</a>
+                        <a href="#">Update Customer</a>
                     </li>
                 </ul>
             </div>
@@ -23,7 +23,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Update costumer</h4>
+                            <h4 class="card-title">Update Customer</h4>
                         </div>
                         <div class="card-body">
                             <form class="form" action="<?= base_url('dev/updateCustomer/' . $customer['id']); ?>" method="post">

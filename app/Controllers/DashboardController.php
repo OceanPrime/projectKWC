@@ -23,15 +23,6 @@ class DashboardController extends BaseController
     }
 
 // KHUSUS ROLE PIC
-    public function ReDrawing()
-    {
-        $session = session();
-        if ($session->get('role') !== 'ReDrawing') {
-            return redirect()->to('/');
-        } 
-        
-        return view('PIC/ReDrawing/index');
-    }
 
     public function ApprovalReDraw()
     {
@@ -55,7 +46,12 @@ class DashboardController extends BaseController
 
     public function editApprovalReDraw()
     {
-        return view('PIC/ApprovalReDraw/edit');
+        $session = session();
+        if ($session->get('role') !== 'ApprovalReDraw') {
+            return redirect()->to('/');
+        } 
+
+        return view('PIC/ApprovalReDraw/task/edit');
     }
 
     // END KHUSUS ROLE PIC

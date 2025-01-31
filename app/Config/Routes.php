@@ -61,7 +61,8 @@ $routes->get('monitoring/tasks/(:num)', '\App\Controllers\MonitoringController::
 $routes->get('/PIC/ReDrawing', 'DashboardController::ReDrawing');
 
 $routes->get('/PIC/ApprovalRedraw', 'DashboardController::ApprovalReDraw');
-$routes->get('/PIC/ApprovalRedraw/index', 'DashboardController::indexApprovalReDraw');
 $routes->get('/PIC/ApprovalRedraw-edit', 'DashboardController::editApprovalReDraw');
+$routes->get('/PIC/ApprovalRedraw/index', 'DashboardController::indexApprovalReDraw');
+// $routes->get('/PIC/ApprovalRedraw-edit', 'DashboardController::editApprovalReDraw');
 
 
