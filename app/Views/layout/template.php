@@ -9,7 +9,7 @@
 	<link rel="icon" href="<?= base_url(); ?>../assets/img/icon.ico" type="image/x-icon" />
 
 	<!-- Fonts and icons -->
-	<script src="../assets/js/plugin/webfont/webfont.min.js"></script>
+	<script src="<?= base_url(); ?>../assets/js/plugin/webfont/webfont.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script>
 		WebFont.load({
@@ -18,7 +18,7 @@
 			},
 			custom: {
 				"families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
-				urls: ['../assets/css/fonts.min.css']
+				urls: ['<?= base_url(); ?>../assets/css/fonts.min.css']
 			},
 			active: function() {
 				sessionStorage.fonts = true;
@@ -26,7 +26,7 @@
 		});
 	</script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	
+
 
 
 	<!-- CSS Files -->
@@ -37,66 +37,98 @@
 	<link rel="stylesheet" href="<?= base_url(); ?>../assets/css/demo.css">
 
 	<style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-        }
-        .monitoring-container {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            width: 100%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .monitoring-header {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .monitoring-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .monitoring-row div {
-            width: 48%;
-        }
-        .label {
-            font-weight: bold;
-        }
-        .value {
-            background-color: #f1f1f1;
-            padding: 5px;
-            border-radius: 4px;
-            text-align: center;
-        }
-        select.value {
-            width: 48%;
-            padding: 5px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            background-color: #f1f1f1;
-            font-size: 14px;
-        }
-        .date-input {
-            display: flex;
-            align-items: center;
-            width: 100%; /* Tambahkan ini */
-        }
-        .date-input input {
-            width: 100%; /* Samakan ukuran dengan select */
-            padding: 5px; /* Samakan padding dengan select */
-            border-radius: 4px; /* Samakan border-radius */
-            border: 1px solid #ddd; /* Samakan border */
-            background-color: #f1f1f1; /* Samakan background */
-            font-size: 14px; /* Samakan font-size */
-            text-align: center;
-        }
-        .date-input input[type="date"]::-webkit-calendar-picker-indicator {
-            cursor: pointer;
-        }
-    </style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f9f9f9;
+		}
+
+		.monitoring-container {
+			background-color: #fff;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			padding: 20px;
+			width: 100%;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+
+		.monitoring-header {
+			font-size: 18px;
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
+
+		.monitoring-row {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 10px;
+		}
+
+		.monitoring-row div {
+			width: 48%;
+		}
+
+		.label {
+			font-weight: bold;
+		}
+
+		.value {
+			background-color: #f1f1f1;
+			padding: 5px;
+			border-radius: 4px;
+			text-align: center;
+		}
+
+		select.value {
+			width: 48%;
+			padding: 5px;
+			border-radius: 4px;
+			border: 1px solid #ddd;
+			background-color: #f1f1f1;
+			font-size: 14px;
+		}
+
+		.date-input {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			/* Tambahkan ini */
+		}
+
+		.date-input input {
+			width: 100%;
+			/* Samakan ukuran dengan select */
+			padding: 5px;
+			/* Samakan padding dengan select */
+			border-radius: 4px;
+			/* Samakan border-radius */
+			border: 1px solid #ddd;
+			/* Samakan border */
+			background-color: #f1f1f1;
+			/* Samakan background */
+			font-size: 14px;
+			/* Samakan font-size */
+			text-align: center;
+		}
+
+		.date-input input[type="date"]::-webkit-calendar-picker-indicator {
+			cursor: pointer;
+		}
+	</style>
+
+	<style>
+		.logo {
+			display: flex;
+			align-items: center;
+			height: 50px;
+			margin-left: -25px;
+		}
+
+		.logo img {
+			max-height: 40px;
+			object-fit: contain;
+			width: 100%;
+		}
+	</style>
 </head>
 
 <body>
@@ -104,9 +136,8 @@
 		<div class="main-header">
 			<!-- Logo Header -->
 			<div class="logo-header" data-background-color="blue">
-
-				<a href="index.html" class="logo">
-					<img src="<?= base_url(); ?>../assets/img/logo.svg" alt="navbar brand" class="navbar-brand">
+				<a href="" class="logo">
+					<img src="<?= base_url(); ?>../assets/img/chemco2.png" alt="navbar brand" class="navbar-brand">
 				</a>
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon">
@@ -125,7 +156,7 @@
 			<!-- Navbar Header -->
 			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
 				<div class="container-fluid">
-					
+
 				</div>
 			</nav>
 			<!-- End Navbar -->
@@ -251,7 +282,7 @@
 	<script src="<?= base_url(); ?>../../assets/js/atlantis.min.js"></script>
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="<?= base_url(); ?>../../assets/js/setting-demo2.js"></script>
-	
+
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="<?= base_url(); ?>../assets/js/setting-demo.js"></script>
 	<script src="<?= base_url(); ?>../assets/js/demo.js"></script>
