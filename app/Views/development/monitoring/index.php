@@ -56,7 +56,7 @@
 									<div class="monitoring-row">
 										<div>
 											<div class="label">Customer :</div>
-											<select id="customer-dropdown" name="customer_id">
+											<select class="value" id="customer-dropdown" name="customer_id">
 												<option value="">-- Select Customer --</option>
 												<?php foreach ($customers as $customer): ?>
 													<option value="<?= $customer['customer_id']; ?>"><?= $customer['customer_name']; ?></option>
@@ -71,7 +71,7 @@
 									<div class="monitoring-row">
 										<div>
 											<div class="label">Project :</div>
-											<select id="project-dropdown" name="project_id">
+											<select class="value" id="project-dropdown" name="project_id">
 												<option value="">-- Select Project --</option>
 											</select>
 										</div>
@@ -101,9 +101,14 @@
 										</div>
 										<div>
 											<div class="label">REMARK PIC :</div>
-											<div id="" class="value">-</div>
+											<select class="value" id="customer-dropdown" name="customer_id">
+												<option value="">-- Select Customer --</option>
+													<option value="">ReDrawing</option>
+													<option value="">Approval ReDraw</option>
+											</select>
+											<textarea class="form-control" id="comment" rows="5" readonly>
+											</textarea>
 										</div>
-
 									</div>
 								</div>
 							</div>

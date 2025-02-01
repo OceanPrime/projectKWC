@@ -6,7 +6,7 @@
     <div class="main-panel">
         <div class="content">
             <div class="page-inner">
-                <h4 class="page-title">Analisa Data Dari Chart</h4>
+                <h4 class="page-title">Analisa Data From Chart</h4>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card">
@@ -50,11 +50,11 @@
         type: 'pie',
         data: {
             datasets: [{
-                data: [50, 35, 15],
-                backgroundColor: ["#1d7af3", "#f3545d", "#fdaf4b"],
+                data: [50, 35],
+                backgroundColor: ["#1d7af3", "#f3545d"],
                 borderWidth: 0
             }],
-            labels: ['New Visitors', 'Subscribers', 'Active Users']
+            labels: ['Planning', 'Actual']
         },
         options: {
             responsive: true,
