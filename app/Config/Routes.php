@@ -58,11 +58,12 @@ $routes->get('monitoring/tasks/(:num)', '\App\Controllers\MonitoringController::
 
 
 /*Khusus Role PIC*/
-$routes->get('/PIC/ReDrawing', 'DashboardController::ReDrawing');
+//$routes->get('/PIC/ReDrawing', 'DashboardController::ReDrawing');
 
-$routes->get('/PIC/ApprovalRedraw', 'DashboardController::ApprovalReDraw');
-$routes->get('/PIC/ApprovalRedraw-edit', 'DashboardController::editApprovalReDraw');
-$routes->get('/PIC/ApprovalRedraw/index', 'DashboardController::indexApprovalReDraw');
+$routes->get('/PIC', 'DashboardController::dashboardPIC');
+$routes->get('/PIC/edit-task/(:num)', 'DashboardController::editTask/$1'); // Route untuk edit task
+$routes->post('/PIC/update-task/(:num)', 'DashboardController::update/$1'); // Route untuk update task
+$routes->get('/PIC/TASK', 'DashboardController::Task');
 // $routes->get('/PIC/ApprovalRedraw-edit', 'DashboardController::editApprovalReDraw');
 
 

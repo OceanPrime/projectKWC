@@ -23,89 +23,68 @@ class LoginController extends BaseController
     }
 
     public function Auth()
-    {
-        $UserModel = new M_User();
-        $username = $this->request->getPost('username');
-        $password = $this->request->getPost('password');
+{
+    $UserModel = new M_User();
+    $username = $this->request->getPost('username');
+    $password = $this->request->getPost('password');
 
-        $user = $UserModel->where('username', $username)->first();
+    $user = $UserModel->where('username', $username)->first();
 
-        if ($user) {
-            if (password_verify($password, $user['password'])) {
-                $session = session();
-                $session->set([
-                    'user_id' => $user['user_id'],
-                    'username' => $user['username'],
-                    'nama' => $user['nama'],
-                    'no_hp' => $user['no_hp'],
-                    'role' => $user['role'],
-                    'logged_in' => true,
-                ]);
-
-                if ($user['role'] == 'Development') {
-                    return redirect()->to('/dev/dashboard');
-
-                } elseif ($user['role'] == 'ReDrawing') {
-                    return redirect()->to('/PIC/ReDrawing');
-
-                } elseif ($user['role'] == 'ApprovalReDraw') {
-                    return redirect()->to('/PIC/ApprovalRedraw');
-                    
-                } elseif ($user['role'] == 'DevelopmentSchedule') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'MoldManufacture') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'MoldShipment') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'MoldArrival') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'DevelopmentBox') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'DevelopCap') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'MoldAssy') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'TrialCasting') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'Machining') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'Painting') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'TestImpact') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'TestBending') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'TestRadial') {
-                    return redirect()->to('/belum ada'); //vbelum
-
-                } elseif ($user['role'] == 'Packing&Delivery') {
-                    return redirect()->to('/belum ada'); //vbelum
-                } else {
-                    // Masih dalam pengembangan
-                    session()->setFlashdata('error', 'Gagal Login, Role tidak ditemukan');
-                    return redirect()->to('/');
-                }
-            } else {
-                session()->setFlashdata('error', 'Password salah!');
-                return redirect()->to('/');
-            }
-        } else {
-            session()->setFlashdata('error', 'Username tidak ditemukan!');
-            return redirect()->to('/');
-        }
+    if (!$user) {
+        session()->setFlashdata('error', 'Username tidak ditemukan!');
+        return redirect()->to('/');
     }
+
+    if (!password_verify($password, $user['password'])) {
+        session()->setFlashdata('error', 'Password salah!');
+        return redirect()->to('/');
+    }
+
+    // Set sesi login
+    $session = session();
+    $session->set([
+        'user_id'   => $user['user_id'],
+        'username'  => $user['username'],
+        'nama'      => $user['nama'],
+        'no_hp'     => $user['no_hp'],
+        'role'      => $user['role'],
+        'logged_in' => true,
+    ]);
+
+    // Jika role = Development, arahkan ke halaman Development
+    if ($user['role'] == 'Development') {
+        return redirect()->to('/dev/dashboard');
+    } 
+
+    // Jika role adalah PIC, arahkan ke satu halaman dashboard
+    $rolePIC = [
+        'ReDrawing',
+        'ApprovalReDraw',
+        'DevelopmentSchedule',
+        'MoldManufacture',
+        'MoldShipment',
+        'MoldArrival',
+        'DevelopmentBox',
+        'DevelopCap',
+        'MoldAssy',
+        'TrialCasting',
+        'Machining',
+        'Painting',
+        'TestImpact',
+        'TestBending',
+        'TestRadial',
+        'Packing&Delivery'
+    ];
+
+    if (in_array($user['role'], $rolePIC)) {
+        return redirect()->to('/PIC'); // Semua PIC masuk ke satu dashboard
+    }
+
+    // Jika role tidak dikenali
+    session()->setFlashdata('error', 'Gagal Login, Role tidak ditemukan');
+    return redirect()->to('/');
+}
+
 
     // Manajemen Akun PIC
     public function pic()

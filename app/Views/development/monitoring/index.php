@@ -120,8 +120,8 @@
 											<th>FINISH P/A</th>
 											<th>GAP S.D(Days)</th>
 											<th>GAP F.D(Days)</th>
-											<th>Leap Time Planning</th>
-											<th>Leap Time Actual</th>
+											<th>Lead Time Planning</th>
+											<th>Lead Time Actual</th>
 										</tr>
 									</thead>
 									<tbody></tbody>

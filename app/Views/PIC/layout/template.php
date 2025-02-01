@@ -3,12 +3,13 @@
 
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Dashboard</title>
+	<title><?= $title; ?></title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="<?= base_url('../assets/img/icon.ico'); ?>" type="image/x-icon" />
 
 	<!-- Fonts and icons -->
 	<script src="<?= base_url('../assets/js/plugin/webfont/webfont.min.js'); ?>"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script>
 		WebFont.load({
 			google: {
@@ -153,19 +154,19 @@
 					</div>
 					<ul class="nav nav-primary">
 						<li class="nav-item active">
-							<a href="<?=base_url('/PIC/ApprovalRedraw'); ?>" class="collapsed" aria-expanded="false">
+							<a href="<?=base_url('/PIC'); ?>" class="collapsed" aria-expanded="false">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="<?=base_url('/PIC/ApprovalRedraw/index'); ?>">
+							<a href="<?=base_url('/PIC/TASK'); ?>">
 								<i class="fas fa-desktop"></i>
 								<p>TASK</p>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="">
+							<a href="<?=base_url('/logout'); ?>">
 								<i class="fas fa-sign-out-alt"></i>
 								<p>Log out</p>
 							</a>
