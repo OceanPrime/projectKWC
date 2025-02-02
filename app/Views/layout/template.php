@@ -172,7 +172,7 @@
 				<div class="sidebar-content">
 					<div class="user">
 						<div class="avatar-sm float-left mr-2">
-							<img src="<?= base_url(); ?>../assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+							<img src="<?= base_url(); ?>../assets/img/development.png" alt="..." class="avatar-img rounded-circle">
 						</div>
 						<div class="info">
 							<a data-toggle="collapse" href="<?= base_url(); ?>#collapseExample" aria-expanded="true">

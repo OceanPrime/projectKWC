@@ -32,6 +32,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Plan Vs Actual</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="planActualChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,9 +51,44 @@
 </div>
 <!-- Chart JS -->
 <script src="../../assets/js/plugin/chart.js/chart.min.js"></script>
+
+
 <script>
-    var 
-        
+    const ctx = document.getElementById('planActualChart').getContext('2d');
+
+    const data = {
+        labels: ['PLAN', 'ACT'],
+        datasets: [{
+            label: 'Days',
+            data: [80, 96], // Ganti nilai ini sesuai kebutuhan
+            backgroundColor: ['#4e73df', '#1cc88a'],
+        }]
+    };
+
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                },
+            },
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    new Chart(ctx, config);
+</script>
+
+<script>
+    var
+
         pieChart = document.getElementById('pieChart').getContext('2d'),
 
         multipleBarChart = document.getElementById('multipleBarChart').getContext('2d');
