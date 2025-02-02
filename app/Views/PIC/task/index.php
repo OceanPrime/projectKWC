@@ -63,7 +63,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <?php $i = 1; ?>
+                                        <?php $i = 1; ?>
                                         <?php foreach ($monitoring as $k) : ?>
                                             <tr>
                                                 <td scope="row"><?= $i++; ?></td>
@@ -80,7 +80,7 @@
                                                 <td><?= $k['remark']; ?></td>
                                                 <td>
                                                     <div class="form-button-action">
-                                                    <a href="/PIC/edit-task/<?= $k['id']; ?>">
+                                                        <a href="/PIC/edit-task/<?= $k['id']; ?>">
                                                             <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-primary" data-original-title="Edit Task">
                                                                 <i class="fa fa-edit"></i>
                                                             </button>

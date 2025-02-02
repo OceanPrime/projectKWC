@@ -15,7 +15,7 @@ class DashboardController extends BaseController
     {
         $this->monitoringModel = new M_Monitoring();
     }
-    public function index()//admin
+    public function index() //admin
     {
         $session = session();
         if ($session->get('role') !== 'Development') {
@@ -30,7 +30,7 @@ class DashboardController extends BaseController
         return view('development/dashboard', $data);
     }
 
-// KHUSUS ROLE PIC
+    // KHUSUS ROLE PIC
 
     public function dashboardPIC()
     {
@@ -73,109 +73,113 @@ class DashboardController extends BaseController
 
         return view('PIC/dashboard', $data);
     }
-    
+
     public function Task()
     {
         $session = session();
         $role = $session->get('role'); // Ambil role user dari session
-    
+
         // List role yang sudah memiliki halaman
         $validRoles = ['ReDrawing', 'ApprovalReDraw'];
-    
+
         // Jika role tidak ada dalam list validRoles, redirect ke halaman default
         if (!in_array($role, $validRoles)) {
             return redirect()->to('/belum-ada');
         }
-    
+
         // Ambil data monitoring hanya untuk role yang login
         $data = [
             'title' => 'Task - ' . $role,
             'validation' => \Config\Services::validation(),
-            'monitoring' => $this->monitoringModel->getMonitoringByTask($role), // Hanya data sesuai role
+            'monitoring' => $this->monitoringModel->getMonitoringByTask($role),
+            'nama'       => $session->get('nama'),
+            'role'       => $role, // Hanya data sesuai role
         ];
-    
+
         return view('PIC/task/index', $data);
     }
-    
+
     public function editTask($id) // Ambil $id task yang akan diedit
     {
         $session = session();
         $role = $session->get('role');
-    
+
         // List role yang sudah memiliki halaman
         $validRoles = ['ReDrawing', 'ApprovalReDraw'];
-    
+
         if (!in_array($role, $validRoles)) {
             return redirect()->to('/belum-ada');
         }
-    
+
         // Ambil data task berdasarkan ID
         $task = $this->monitoringModel->find($id);
-    
+
         if (!$task) {
             return redirect()->to('/PIC/TASK')->with('error', 'Task tidak ditemukan!');
         }
-    
+
         $data = [
             'title' => 'Edit Task - ' . $role,
             'validation' => \Config\Services::validation(),
-            'task' => $task, // Kirim data task ke view
+            'task' => $task,
+            'nama'       => $session->get('nama'),
+            'role'       => $role, // Kirim data task ke view
         ];
-        
+
         return view('PIC/task/edit', $data);
     }
-    
+
     public function update($id)
-{
-    $session = session();
-    $role = $session->get('role');
+    {
+        $session = session();
+        $role = $session->get('role');
 
-    // Cek apakah role memiliki akses
-    $validRoles = ['ReDrawing', 'ApprovalReDraw'];
-    if (!in_array($role, $validRoles)) {
-        return redirect()->to('/belum-ada')->with('error', 'Anda tidak memiliki akses!');
+        // Cek apakah role memiliki akses
+        $validRoles = ['ReDrawing', 'ApprovalReDraw'];
+        if (!in_array($role, $validRoles)) {
+            return redirect()->to('/belum-ada')->with('error', 'Anda tidak memiliki akses!');
+        }
+
+        $taskModel = new M_Monitoring();
+        $task = $taskModel->find($id);
+        $validation = \Config\Services::validation();
+
+        if (!$task) {
+            return redirect()->to('/PIC/TASK')->with('swal_error', 'Task tidak ditemukan!');
+        }
+
+        // Validasi data yang dikirimkan dari form
+        if (!$this->validate([
+            'start_plan'    => 'required|valid_date',
+            'finish_plan'   => 'required|valid_date',
+            'start_actual'  => 'required|valid_date',
+            'finish_actual' => 'required|valid_date',
+            'remark'        => 'required|min_length[3]',
+            'status'        => 'required|in_list[COMPLETED,COMPLETED DELAY]',
+        ])) {
+            session()->setFlashdata('error_validation', $validation->listErrors());
+            return redirect()->back()->withInput();
+        }
+
+        // Hitung leap_time_actual (selisih hari antara start_actual dan finish_actual)
+        $startActual = new \DateTime($this->request->getPost('start_actual'));
+        $finishActual = new \DateTime($this->request->getPost('finish_actual'));
+        $leapTimeActual = $startActual->diff($finishActual)->days; // Selisih hari
+
+        // Update data ke database
+        $taskModel->update($id, [
+            'start_plan'      => $this->request->getPost('start_plan'),
+            'finish_plan'     => $this->request->getPost('finish_plan'),
+            'start_actual'    => $this->request->getPost('start_actual'),
+            'finish_actual'   => $this->request->getPost('finish_actual'),
+            'remark'          => $this->request->getPost('remark'),
+            'status'          => $this->request->getPost('status'),
+            'leap_time_actual' => $leapTimeActual, // Simpan hasil perhitungan
+        ]);
+
+        session()->setFlashdata('swal_success', 'Task berhasil diperbarui!');
+        return redirect()->to('/PIC/TASK');
     }
-
-    $taskModel = new M_Monitoring();
-    $task = $taskModel->find($id);
-    $validation = \Config\Services::validation();
-
-    if (!$task) {
-        return redirect()->to('/PIC/TASK')->with('swal_error', 'Task tidak ditemukan!');
-    }
-
-    // Validasi data yang dikirimkan dari form
-    if (!$this->validate([
-        'start_plan'    => 'required|valid_date',
-        'finish_plan'   => 'required|valid_date',
-        'start_actual'  => 'required|valid_date',
-        'finish_actual' => 'required|valid_date',
-        'remark'        => 'required|min_length[3]',
-        'status'        => 'required|in_list[COMPLETED,COMPLETED DELAY]',
-    ])) {
-        session()->setFlashdata('error_validation', $validation->listErrors());
-        return redirect()->back()->withInput();
-    }
-
-    // Hitung leap_time_actual (selisih hari antara start_actual dan finish_actual)
-    $startActual = new \DateTime($this->request->getPost('start_actual'));
-    $finishActual = new \DateTime($this->request->getPost('finish_actual'));
-    $leapTimeActual = $startActual->diff($finishActual)->days; // Selisih hari
-
-    // Update data ke database
-    $taskModel->update($id, [
-        'start_plan'      => $this->request->getPost('start_plan'),
-        'finish_plan'     => $this->request->getPost('finish_plan'),
-        'start_actual'    => $this->request->getPost('start_actual'),
-        'finish_actual'   => $this->request->getPost('finish_actual'),
-        'remark'          => $this->request->getPost('remark'),
-        'status'          => $this->request->getPost('status'),
-        'leap_time_actual' => $leapTimeActual, // Simpan hasil perhitungan
-    ]);
-
-    session()->setFlashdata('swal_success', 'Task berhasil diperbarui!');
-    return redirect()->to('/PIC/TASK');
-}
 
 
 
