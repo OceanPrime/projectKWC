@@ -28,9 +28,9 @@ class MonitoringController extends BaseController
         if ($session->get('role') !== 'Development') {
             return redirect()->to('/');
         }
-        
+
         $data = [
-            'nama' => $session->get('nama'), 
+            'nama' => $session->get('nama'),
             'role' => $session->get('role'),
         ];
 
@@ -39,7 +39,49 @@ class MonitoringController extends BaseController
         $data['title'] = 'Monitoring Data';
 
         return view('development/monitoring/index', $data);
-    }   
+    }
+    
+    //tambahan baru view project
+    public function view()
+    {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
+        $data = [
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
+            'view' => $this->monitoringModel->findAll(),  
+        ];
+
+        $data['customers'] = $this->modelModel->select('customer_id, customer_name')->distinct()->findAll();
+        $data['jenis'] = $this->modelModel->distinct()->findColumn('jenis');
+        $data['title'] = 'Monitoring Data';
+
+        return view('development/monitoring/view', $data);
+    }
+
+    public function editView()
+    {
+        $session = session();
+        if ($session->get('role') !== 'Development') {
+            return redirect()->to('/');
+        }
+
+        $data = [
+            'nama' => $session->get('nama'),
+            'role' => $session->get('role'),
+            'view' => $this->monitoringModel->findAll(),  
+        ];
+
+        $data['customers'] = $this->modelModel->select('customer_id, customer_name')->distinct()->findAll();
+        $data['jenis'] = $this->modelModel->distinct()->findColumn('jenis');
+        $data['title'] = 'Monitoring Data';
+
+        return view('development/monitoring/editView', $data);
+    }
+    //end view project
 
     public function tambahMonitoring()
     {
@@ -47,15 +89,15 @@ class MonitoringController extends BaseController
         if ($session->get('role') !== 'Development') {
             return redirect()->to('/');
         }
-        
+
         $data = [
-            'nama' => $session->get('nama'), 
+            'nama' => $session->get('nama'),
             'role' => $session->get('role'),
         ];
 
         $data['users'] = $this->ModelUser
             ->select('user_id, role, nama')
-            ->notLike('role', 'Development')// Kecualikan role Development
+            ->notLike('role', 'Development') // Kecualikan role Development
             ->distinct()
             ->findAll();
 
@@ -74,68 +116,68 @@ class MonitoringController extends BaseController
     }
 
     public function saveMonitoring()
-{
-    // Ambil data utama
-    $customer_id = $this->request->getPost('customer_id');
-    $model_id = $this->request->getPost('model_id');
-    $die_go = $this->request->getPost('die_go');
+    {
+        // Ambil data utama
+        $customer_id = $this->request->getPost('customer_id');
+        $model_id = $this->request->getPost('model_id');
+        $die_go = $this->request->getPost('die_go');
 
-    // Ambil array dari multiple input task PIC
-    $picIds = $this->request->getPost('pic_id');
-    $planStarts = $this->request->getPost('planStart');
-    $planFinishes = $this->request->getPost('planFinish');
+        // Ambil array dari multiple input task PIC
+        $picIds = $this->request->getPost('pic_id');
+        $planStarts = $this->request->getPost('planStart');
+        $planFinishes = $this->request->getPost('planFinish');
 
-    // Validasi utama
-    $validation = $this->validate([
-        'customer_id' => 'required',
-        'model_id'    => 'required',
-        'die_go'      => 'required|valid_date',
-    ]);
-
-    if (!$validation) {
-        return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-    }
-
-    // **Validasi setiap task (PIC)**
-    if (empty($picIds) || empty($planStarts) || empty($planFinishes)) {
-        return redirect()->back()->withInput()->with('swal_error', 'Minimal satu Task PIC harus diisi.');
-    }
-
-    foreach ($picIds as $index => $picId) {
-        if (empty($picId) || empty($planStarts[$index]) || empty($planFinishes[$index])) {
-            return redirect()->back()->withInput()->with('swal_error', 'Semua Task PIC harus memiliki PIC, Plan Start, dan Plan Finish.');
-        }
-    }
-
-    // **Simpan data task ke database**
-    foreach ($picIds as $index => $picId) {
-        // **Ambil role dari PIC**
-        $user = $this->ModelUser->find($picId);
-        $taskName = $user ? $user['role'] : 'UNKNOWN';
-
-        // **Hitung leap_time_planning (selisih hari antara start_plan dan finish_plan)**
-        $startDate = new \DateTime($planStarts[$index]);
-        $finishDate = new \DateTime($planFinishes[$index]);
-        $leapTimePlanning = $startDate->diff($finishDate)->days; // Hitung selisih hari
-
-        // Simpan ke database
-        $this->monitoringModel->save([
-            'customer_id'        => $customer_id,
-            'model_id'           => $model_id,
-            'pic_id'             => $picId,
-            'task_name'          => $taskName,
-            'start_plan'         => $planStarts[$index],
-            'finish_plan'        => $planFinishes[$index],
-            'status'             => 'PENDING',
-            'gap_sd'             => 0,
-            'gap_fd'             => 0,
-            'leap_time_planning' => $leapTimePlanning, // Tambahkan hasil perhitungan
-            'leap_time_actual'   => 0,
+        // Validasi utama
+        $validation = $this->validate([
+            'customer_id' => 'required',
+            'model_id'    => 'required',
+            'die_go'      => 'required|valid_date',
         ]);
-    }
 
-    return redirect()->to('/dev/monitoring')->with('swal_success', 'Task PIC berhasil ditambahkan.');
-}
+        if (!$validation) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        // **Validasi setiap task (PIC)**
+        if (empty($picIds) || empty($planStarts) || empty($planFinishes)) {
+            return redirect()->back()->withInput()->with('swal_error', 'Minimal satu Task PIC harus diisi.');
+        }
+
+        foreach ($picIds as $index => $picId) {
+            if (empty($picId) || empty($planStarts[$index]) || empty($planFinishes[$index])) {
+                return redirect()->back()->withInput()->with('swal_error', 'Semua Task PIC harus memiliki PIC, Plan Start, dan Plan Finish.');
+            }
+        }
+
+        // **Simpan data task ke database**
+        foreach ($picIds as $index => $picId) {
+            // **Ambil role dari PIC**
+            $user = $this->ModelUser->find($picId);
+            $taskName = $user ? $user['role'] : 'UNKNOWN';
+
+            // **Hitung leap_time_planning (selisih hari antara start_plan dan finish_plan)**
+            $startDate = new \DateTime($planStarts[$index]);
+            $finishDate = new \DateTime($planFinishes[$index]);
+            $leapTimePlanning = $startDate->diff($finishDate)->days; // Hitung selisih hari
+
+            // Simpan ke database
+            $this->monitoringModel->save([
+                'customer_id'        => $customer_id,
+                'model_id'           => $model_id,
+                'pic_id'             => $picId,
+                'task_name'          => $taskName,
+                'start_plan'         => $planStarts[$index],
+                'finish_plan'        => $planFinishes[$index],
+                'status'             => 'PENDING',
+                'gap_sd'             => 0,
+                'gap_fd'             => 0,
+                'leap_time_planning' => $leapTimePlanning, // Tambahkan hasil perhitungan
+                'leap_time_actual'   => 0,
+            ]);
+        }
+
+        return redirect()->to('/dev/monitoring')->with('swal_success', 'Task PIC berhasil ditambahkan.');
+    }
 
     public function getProjects($customerId)
     {
@@ -152,7 +194,7 @@ class MonitoringController extends BaseController
     public function getPlanFinish($projectId)
     {
         $project = $this->modelModel->select('id, die_go')->find($projectId);
-    
+
         if ($project) {
             return $this->response->setJSON($project);
         } else {
@@ -171,5 +213,4 @@ class MonitoringController extends BaseController
 
         return $this->response->setJSON($tasks);
     }
-
 }

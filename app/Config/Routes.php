@@ -17,6 +17,10 @@ $routes->get('/dev/dashboard', 'DashboardController::index');
 
 /*Monitoring*/
 $routes->get('/dev/monitoring', 'MonitoringController::index');
+
+$routes->get('/dev/monitoring-view', 'MonitoringController::view');  //routes baru view project
+$routes->get('/dev/monitoring-editView', 'MonitoringController::editView');  //routes baru view project
+
 $routes->post('/monitoring-save', 'MonitoringController::saveMonitoring');
 $routes->get('/dev/monitoring-tambah', 'MonitoringController::tambahMonitoring');
 $routes->get('monitoring/planFinish/(:num)', 'MonitoringController::getPlanFinish/$1');

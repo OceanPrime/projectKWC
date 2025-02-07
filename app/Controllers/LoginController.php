@@ -73,7 +73,7 @@ class LoginController extends BaseController
         'TestImpact',
         'TestBending',
         'TestRadial',
-        'Packing&Delivery'
+        'Packing&Delivery',
     ];
 
     if (in_array($user['role'], $rolePIC)) {

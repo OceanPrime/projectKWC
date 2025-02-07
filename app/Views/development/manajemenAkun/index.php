@@ -4,7 +4,7 @@
     <div class="content">
         <div class="page-inner">
             <div class="page-header">
-                <h4 class="page-title">Project KCC</h4>
+                <h4 class="page-title">Project KCW</h4>
                 <ul class="breadcrumbs">
                     <li class="nav-home">
                         <a href="#">
@@ -63,43 +63,42 @@
                                             <th>No</th>
                                             <th>Name</th>
                                             <th>Username</th>
-                                
                                             <th>No. Handphone</th>
                                             <th>Role</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       
+
                                         <?php $i = 1; ?>
                                         <?php foreach ($Usermodel as $k) : ?>
-                                        <tr>
-                                            <td scope="row"><?= $i++; ?></td>
-                                            <td><?= $k['nama']; ?></td>
-                                            <td><?= $k['username']; ?></td>
-                                            <td><?= $k['no_hp']; ?></td>
-                                            <td><?= $k['role']; ?></td>
-                                            <td>
-                                                <div class="form-button-action">
-                                                    <a href="<?= base_url('/dev/editPIC/' . $k['user_id']); ?>">
-                                                        <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-primary" data-original-title="Edit Task">
-                                                            <i class="fa fa-edit"></i>
-                                                        </button>
-                                                    </a>
-                                                    <a href="javascript:void(0);" 
-                                                        data-url="<?= base_url('/account/delete/' . $k['user_id']); ?>" 
-                                                        class="btn btn-link btn-simple-danger delete-button" 
-                                                        data-toggle="tooltip" 
-                                                        title="Hapus Data">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
+                                            <tr>
+                                                <td scope="row"><?= $i++; ?></td>
+                                                <td><?= $k['nama']; ?></td>
+                                                <td><?= $k['username']; ?></td>
+                                                <td><?= $k['no_hp']; ?></td>
+                                                <td><?= $k['role']; ?></td>
+                                                <td>
+                                                    <div class="form-button-action">
+                                                        <a href="<?= base_url('/dev/editPIC/' . $k['user_id']); ?>">
+                                                            <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-primary" data-original-title="Edit Task">
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                        </a>
+                                                        <a href="javascript:void(0);"
+                                                            data-url="<?= base_url('/account/delete/' . $k['user_id']); ?>"
+                                                            class="btn btn-link btn-simple-danger delete-button"
+                                                            data-toggle="tooltip"
+                                                            title="Hapus Data">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
 
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         <?php endforeach; ?>
-                                       
-                                        
+
+
                                     </tbody>
                                 </table>
                             </div>
@@ -113,11 +112,11 @@
 </div>
 <script>
     // Tangkap event klik pada tombol dengan class `delete-button`
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const deleteButtons = document.querySelectorAll('.delete-button');
 
         deleteButtons.forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const deleteUrl = this.getAttribute('data-url'); // Ambil URL dari atribut data-url
 
                 Swal.fire({

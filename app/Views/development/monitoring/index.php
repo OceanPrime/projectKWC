@@ -4,7 +4,7 @@
 	<div class="content">
 		<div class="page-inner">
 			<div class="page-header">
-				<h4 class="page-title">Project KWC</h4>
+				<h4 class="page-title">Project KCW</h4>
 				<ul class="breadcrumbs">
 					<li class="nav-home">
 						<a href="#">
@@ -47,6 +47,12 @@
 								<button class="btn btn-primary rounded-pill">
 									<i class="fa fa-plus"></i>
 									Add Project
+								</button>
+							</a>
+							<a href="<?= base_url('/dev/monitoring-view'); ?>">
+								<button class="btn btn-success rounded-pill">
+									<i class="fa fa-eye"></i>
+									View Project
 								</button>
 							</a>
 						</div>
@@ -220,6 +226,7 @@
                                     <td>${task.gap_sd}</td>
                                     <td>${task.gap_fd}</td>
                                     <td>${task.leap_time_planning}</td>
+                                    <td>${task.leap_time_actual}</td>
                                     <td>${task.leap_time_actual}</td>
                                 </tr>
                             `);
