@@ -177,8 +177,8 @@
 						<div class="info">
 							<a data-toggle="collapse" href="<?= base_url(''); ?>#collapseExample" aria-expanded="true">
 								<span>
-									<?= esc($nama); ?>
-									<span class="user-level"><?= esc($role); ?></span>
+									<?= session()->get('nama'); ?>
+									<span class="user-level"><?= session()->get('role'); ?></span>
 								</span>
 							</a>
 						</div>

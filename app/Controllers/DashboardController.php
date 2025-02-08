@@ -1,36 +1,49 @@
 <?php
 
 namespace App\Controllers;
-
+use DateTime;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\M_Monitoring;
+use App\Models\M_Customer;
+use App\Models\M_Model;
 
 class DashboardController extends BaseController
 {
 
     protected $monitoringModel;
+    protected $modelModel;
 
     public function __construct()
     {
         $this->monitoringModel = new M_Monitoring();
+        $this->modelModel = new M_Model();
     }
-    public function index() //admin
-    {
-        $session = session();
-        if ($session->get('role') !== 'Development') {
-            return redirect()->to('/');
-        }
-
-        $data = [
-            'title' => 'Dashboard',
-            'nama' => $session->get('nama'),
-            'role' => $session->get('role'),
-        ];
-        return view('development/dashboard', $data);
+    public function index() // Admin
+{
+    $session = session();
+    if ($session->get('role') !== 'Development') {
+        return redirect()->to('/');
     }
 
-    // KHUSUS ROLE PIC
+    $monitoringModel = new M_Monitoring(); // Gunakan model Monitoring
+    $customers = $monitoringModel->select('DISTINCT(customer_id), customers.customer_name')
+                                 ->join('customers', 'monitoring.customer_id = customers.id', 'left')
+                                 ->findAll(); // Ambil daftar customer unik dari monitoring
+
+    $data = [
+        'title' => 'Dashboard',
+        'nama' => $session->get('nama'),
+        'role' => $session->get('role'),
+        'customers' => $customers // Kirim data customer ke view
+    ];
+
+    return view('development/dashboard', $data);
+}
+
+
+
+// KHUSUS ROLE PIC
 
     public function dashboardPIC()
     {
@@ -73,82 +86,137 @@ class DashboardController extends BaseController
 
         return view('PIC/dashboard', $data);
     }
-
+    
     public function Task()
     {
         $session = session();
         $role = $session->get('role'); // Ambil role user dari session
-
+    
         // List role yang sudah memiliki halaman
-        $validRoles = ['ReDrawing', 'ApprovalReDraw'];
-
+        $validRoles = ['ReDrawing',
+        'ApprovalReDraw',
+        'DevelopmentSchedule',
+        'MoldManufacture',
+        'MoldShipment',
+        'MoldArrival',
+        'DevelopmentBox',
+        'DevelopCap',
+        'MoldAssy',
+        'TrialCasting',
+        'Machining',
+        'Painting',
+        'TestImpact',
+        'TestBending',
+        'TestRadial',
+        'Packing&Delivery'];
+    
         // Jika role tidak ada dalam list validRoles, redirect ke halaman default
         if (!in_array($role, $validRoles)) {
             return redirect()->to('/belum-ada');
         }
-
+    
         // Ambil data monitoring hanya untuk role yang login
         $data = [
             'title' => 'Task - ' . $role,
             'validation' => \Config\Services::validation(),
-            'monitoring' => $this->monitoringModel->getMonitoringByTask($role),
-            'nama'       => $session->get('nama'),
-            'role'       => $role, // Hanya data sesuai role
+            'monitoring' => $this->monitoringModel->getMonitoringByTask($role), // Hanya data sesuai role
         ];
-
+    
         return view('PIC/task/index', $data);
     }
-
-    public function editTask($id) // Ambil $id task yang akan diedit
+    
+    public function editTask($id)
     {
         $session = session();
         $role = $session->get('role');
-
-        // List role yang sudah memiliki halaman
-        $validRoles = ['ReDrawing', 'ApprovalReDraw'];
-
-        if (!in_array($role, $validRoles)) {
-            return redirect()->to('/belum-ada');
-        }
-
+    
         // Ambil data task berdasarkan ID
         $task = $this->monitoringModel->find($id);
-
+    
         if (!$task) {
             return redirect()->to('/PIC/TASK')->with('error', 'Task tidak ditemukan!');
         }
-
+    
+        // Pastikan user hanya bisa mengedit task sesuai dengan task_name yang sesuai dengan rolenya
+        if ($task['task_name'] !== $role) {
+            return redirect()->to('/PIC/TASK')->with('error', 'Anda tidak memiliki akses untuk mengedit task ini!');
+        }
+    
+        // Cari task sebelumnya dalam model yang sama (dengan ID lebih kecil)
+        $prevTask = $this->monitoringModel
+            ->where('model_id', $task['model_id'])
+            ->where('id <', $task['id'])
+            ->orderBy('id', 'DESC')
+            ->first();
+    
+        // Hitung GAP S.D (Days) dan GAP F.D (Days)
+        $gapSD = 0;
+        $gapFD = 0;
+    
+        if (!empty($task['start_plan']) && !empty($task['start_actual'])) {
+            $gapSD = (new DateTime($task['start_actual']))->diff(new DateTime($task['start_plan']))->days;
+        }
+    
+        if (!empty($task['finish_plan']) && !empty($task['finish_actual'])) {
+            $gapFD = (new DateTime($task['finish_actual']))->diff(new DateTime($task['finish_plan']))->days;
+        }
+    
         $data = [
             'title' => 'Edit Task - ' . $role,
             'validation' => \Config\Services::validation(),
-            'task' => $task,
-            'nama'       => $session->get('nama'),
-            'role'       => $role, // Kirim data task ke view
+            'task' => $task, // Kirim data task ke view
+            'prevTask' => $prevTask, // Kirim data task sebelumnya untuk validasi form
+            'gapSD' => $gapSD, // Kirim nilai gap start date
+            'gapFD' => $gapFD, // Kirim nilai gap finish date
         ];
-
+    
         return view('PIC/task/edit', $data);
     }
+    
 
-    public function update($id)
+    
+        public function update($id)
     {
         $session = session();
         $role = $session->get('role');
 
-        // Cek apakah role memiliki akses
-        $validRoles = ['ReDrawing', 'ApprovalReDraw'];
-        if (!in_array($role, $validRoles)) {
+        // Daftar role dalam urutan yang benar
+        $roles = [
+            'ReDrawing', 'ApprovalReDraw', 'DevelopmentSchedule', 'MoldManufacture',
+            'MoldShipment', 'MoldArrival', 'DevelopmentBox', 'DevelopCap', 'MoldAssy',
+            'TrialCasting', 'Machining', 'Painting', 'TestImpact', 'TestBending',
+            'TestRadial', 'Packing&Delivery'
+        ];
+
+        // Cek apakah user memiliki role yang valid
+        if (!in_array($role, $roles)) {
             return redirect()->to('/belum-ada')->with('error', 'Anda tidak memiliki akses!');
         }
 
         $taskModel = new M_Monitoring();
         $task = $taskModel->find($id);
-        $validation = \Config\Services::validation();
 
         if (!$task) {
             return redirect()->to('/PIC/TASK')->with('swal_error', 'Task tidak ditemukan!');
         }
 
-        // Validasi data yang dikirimkan dari form
+        // Cari index role saat ini dalam daftar roles
+        $currentIndex = array_search($role, $roles);
+        
+        // Cek apakah ada role sebelumnya
+        $prevTask = null;
+        if ($currentIndex > 0) {
+            $previousRole = $roles[$currentIndex - 1];
+            $prevTask = $taskModel->where('task_name', $previousRole)->where('id', $id)->first();
+        }
+
+        // Jika ada role sebelumnya dan tasknya belum selesai, larang update
+        if ($prevTask && empty($prevTask['finish_actual'])) {
+            return redirect()->to('/PIC/TASK')->with('swal_error', 'Task sebelumnya belum selesai!');
+        }
+
+        // Validasi form
+        $validation = \Config\Services::validation();
         if (!$this->validate([
             'start_plan'    => 'required|valid_date',
             'finish_plan'   => 'required|valid_date',
@@ -164,7 +232,7 @@ class DashboardController extends BaseController
         // Hitung leap_time_actual (selisih hari antara start_actual dan finish_actual)
         $startActual = new \DateTime($this->request->getPost('start_actual'));
         $finishActual = new \DateTime($this->request->getPost('finish_actual'));
-        $leapTimeActual = $startActual->diff($finishActual)->days; // Selisih hari
+        $leapTimeActual = $startActual->diff($finishActual)->days;
 
         // Update data ke database
         $taskModel->update($id, [
@@ -174,7 +242,7 @@ class DashboardController extends BaseController
             'finish_actual'   => $this->request->getPost('finish_actual'),
             'remark'          => $this->request->getPost('remark'),
             'status'          => $this->request->getPost('status'),
-            'leap_time_actual' => $leapTimeActual, // Simpan hasil perhitungan
+            'leap_time_actual' => $leapTimeActual,
         ]);
 
         session()->setFlashdata('swal_success', 'Task berhasil diperbarui!');
@@ -183,5 +251,54 @@ class DashboardController extends BaseController
 
 
 
+
+
     // END KHUSUS ROLE PIC
+
+    public function getModelsByCustomer($customerId)
+{
+    $models = $this->modelModel->where('customer_id', $customerId)->findAll();
+    return $this->response->setJSON($models);
+}
+    
+
+
+
+
+
+
+public function getLeadTimeComparison($customerId, $modelId)
+{
+    $totalPlan = $this->monitoringModel
+        ->selectSum('leap_time_planning')
+        ->where('customer_id', $customerId)
+        ->where('model_id', $modelId)
+        ->get()
+        ->getRow()
+        ->leap_time_planning ?? 0;
+
+    $totalActual = $this->monitoringModel
+        ->selectSum('leap_time_actual')
+        ->where('customer_id', $customerId)
+        ->where('model_id', $modelId)
+        ->get()
+        ->getRow()
+        ->leap_time_actual ?? 0;
+
+    // Total lead time keseluruhan
+    $totalLeadTime = $totalPlan + $totalActual;
+
+    // Menghindari pembagian dengan nol
+    $percentagePlan = $totalLeadTime > 0 ? round(($totalPlan / $totalLeadTime) * 100, 2) : 0;
+    $percentageActual = $totalLeadTime > 0 ? round(($totalActual / $totalLeadTime) * 100, 2) : 0;
+
+    return $this->response->setJSON([
+        'leap_time_planning' => (int) $totalPlan,
+        'leap_time_actual' => (int) $totalActual,
+        'percentage_plan' => $percentagePlan,
+        'percentage_actual' => $percentageActual
+    ]);
+}
+
+    
 }

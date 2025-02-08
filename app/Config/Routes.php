@@ -14,6 +14,10 @@ $routes->get('/logout', 'LoginController::logout');
 
 /*Dashboard Admin*/
 $routes->get('/dev/dashboard', 'DashboardController::index');
+$routes->get('dev/monitoring/getModelsByCustomer/(:num)', 'DashboardController::getModelsByCustomer/$1');
+$routes->get('dev/monitoring/getLeadTimeComparison/(:num)/(:num)', 'DashboardController::getLeadTimeComparison/$1/$2');
+
+
 
 /*Monitoring*/
 $routes->get('/dev/monitoring', 'MonitoringController::index');
