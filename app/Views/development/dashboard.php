@@ -130,66 +130,101 @@ var myPlanVsActualChart = new Chart(planVsActualChart, {
 
 
 
-<script>
-    //garis garis chart
-    var
 
-        multipleBarChart = document.getElementById('multipleBarChart').getContext('2d');
+<canvas id="multipleBarChart"></canvas>
+
+<script>
+   $(document).ready(function () {
+    var multipleBarChart = document.getElementById('multipleBarChart').getContext('2d');
     var myMultipleBarChart = new Chart(multipleBarChart, {
-    type: 'bar',
-    data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [{
-            label: "Plan",
-            backgroundColor: '#1d7af3', // Warna biru untuk Plan
-            borderColor: '#1d7af3',
-            data: [100, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220], // Data Plan
-        }, {
-            label: "Actual",
-            backgroundColor: '#59d05d', // Warna hijau untuk Actual
-            borderColor: '#59d05d',
-            data: [95, 110, 125, 135, 145, 155, 165, 175, 185, 195, 205, 215], // Data Actual
-        }],
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        legend: {
-            position: 'bottom'
-        },
-        title: {
-            display: true,
-            text: 'Plan vs Actual'
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false
-        },
-        scales: {
-            xAxes: [{
-                stacked: false, // Tidak menggunakan stacked bar
+        type: 'bar',
+        data: {
+            labels: [], // Label akan diisi dari AJAX
+            datasets: [{
+                label: "Plan",
+                backgroundColor: '#1d7af3',
+                borderColor: '#1d7af3',
+                data: []
+            }, {
+                label: "Actual",
+                backgroundColor: '#59d05d',
+                borderColor: '#59d05d',
+                data: []
             }],
-            yAxes: [{
-                stacked: false, // Tidak menggunakan stacked bar
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                position: 'bottom'
+            },
+            title: {
+                display: true,
+                text: 'Plan vs Actual'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+            scales: {
+                xAxes: [{
+                    stacked: false,
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 90,
+                        minRotation: 90
+                    }
+                }],
+                yAxes: [{
+                    stacked: false,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
         }
-    }
     });
 
-    var myLegendContainer = document.getElementById("myChartLegend");
+    function loadChartData(customerId, modelId) {
+    $.ajax({
+        url: 'monitoring/getLeadTimeComparisonData/' + customerId + '/' + modelId,
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            console.log("Data dari server:", response);
 
-    // generate HTML legend
-    myLegendContainer.innerHTML = myHtmlLegendsChart.generateLegend();
+            if (!Array.isArray(response.leap_time_planning) || !Array.isArray(response.leap_time_actual)) {
+                console.error("Data tidak valid: leap_time_planning atau leap_time_actual bukan array!");
+                return;
+            }
 
-    // bind onClick event to all LI-tags of the legend
-    var legendItems = myLegendContainer.getElementsByTagName('li');
-    for (var i = 0; i < legendItems.length; i += 1) {
-        legendItems[i].addEventListener("click", legendClickCallback, false);
-    }
+            myMultipleBarChart.data.labels = response.labels;
+            myMultipleBarChart.data.datasets[0].data = response.leap_time_planning;
+            myMultipleBarChart.data.datasets[1].data = response.leap_time_actual;
+            myMultipleBarChart.update();
+        },
+        error: function (xhr, status, error) {
+            console.error("Error mengambil data:", xhr.responseText);
+        }
+    });
+}
+
+
+    // Panggil saat dropdown berubah
+    $('#model').change(function () {
+        var customerId = $('#customer').val();
+        var modelId = $(this).val();
+        if (customerId && modelId) {
+            loadChartData(customerId, modelId);
+        }
+    });
+});
+
 </script>
+
+
+
+
 
 <script>
     //dropdown customer & model

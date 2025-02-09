@@ -22,8 +22,8 @@ class M_User extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
-    protected $beforeInsert = ['hashPassword'];
-    protected $beforeUpdate = ['hashPassword'];
+    //protected $beforeInsert = ['hashPassword'];
+    //protected $beforeUpdate = ['hashPassword'];
 
 
     protected function hashPassword(array $data)

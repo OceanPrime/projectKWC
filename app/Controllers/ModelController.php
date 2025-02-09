@@ -56,6 +56,7 @@ class ModelController extends BaseController
 
     public function save()
     {
+        $validation = \Config\Services::validation();
         if (!$this->validate([
             'model_name' => [
                 'rules' => 'required|is_unique[models.model_name]',
@@ -113,6 +114,7 @@ class ModelController extends BaseController
                 ]
             ],
         ])) {
+            session()->setFlashdata('error_validation', $validation->listErrors());
             return redirect()->to('/dev/model-tambah')->withInput();
         }
 

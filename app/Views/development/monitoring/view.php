@@ -15,7 +15,7 @@
 						<i class="flaticon-right-arrow"></i>
 					</li>
 					<li class="nav-item">
-						<a href="#">View Project</a>
+						<a href="#">View Project PIC</a>
 					</li>
 				</ul>
 			</div>
@@ -53,7 +53,7 @@
 									<thead>
 										<tr>
 											<th>No.</th>
-											<th>Project</th>
+											<th>PIC</th>
 											<th>START P/A</th>
 											<th>FINISH P/A</th>
 											<th>GAP S.D(Days)</th>
@@ -79,13 +79,13 @@
 												<td><?= $k['status']; ?></td>
 												<td>
 													<div class="form-button-action">
-														<a href="<?= base_url('/dev/monitoring-editView'); ?>">
+														<a href="<?= base_url('/dev/monitoring-editView/' . $k['id']); ?>">
 															<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-simple-primary" data-original-title="Edit Task">
 																<i class="fa fa-edit"></i>
 															</button>
 														</a>
 														<a href="javascript:void(0);"
-															data-url=""
+															data-url="<?= base_url('/dev/monitoring-deleteView/' . $k['id']); ?>"
 															class="btn btn-link btn-simple-danger delete-button"
 															data-toggle="tooltip"
 															title="Hapus Data">

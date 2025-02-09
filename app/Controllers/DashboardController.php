@@ -300,5 +300,66 @@ public function getLeadTimeComparison($customerId, $modelId)
     ]);
 }
 
+public function getLeadTimeComparisonData($customerId, $modelId)
+{
+    // Labels untuk chart
+    $labels = [
+        "ReDrawing", "ApprovalReDraw", "DevelopmentSchedule", "MoldManufacture", 
+        "MoldShipment", "MoldArrival", "DevelopmentBox", "Develop Cap", 
+        "MoldAssy", "TrialCasting", "Machining", "Painting", 
+        "TestImpact", "TestBending", "TestRadial", "Packing&Delivery"
+    ];
+
+    // Ambil data dari database
+    $query = $this->monitoringModel
+        ->select('task_name, leap_time_planning, leap_time_actual')
+        ->where('customer_id', $customerId)
+        ->where('model_id', $modelId)
+        ->findAll();
+
+    // Jika data kosong, isi dengan array kosong
+    if (empty($query)) {
+        return $this->response->setJSON([
+            "labels" => $labels,
+            "leap_time_planning" => array_fill(0, count($labels), 0),
+            "leap_time_actual" => array_fill(0, count($labels), 0)
+        ]);
+    }
+
+    // Inisialisasi array
+    $planData = array_fill(0, count($labels), 0);
+    $actualData = array_fill(0, count($labels), 0);
+
+    // Isi array sesuai task_name
+    foreach ($query as $row) {
+        $taskIndex = array_search($row['task_name'], $labels);
+        if ($taskIndex !== false) {
+            $planData[$taskIndex] = (int) ($row['leap_time_planning'] ?? 0);
+            $actualData[$taskIndex] = (int) ($row['leap_time_actual'] ?? 0);
+        }
+    }
+
+    // Debugging JSON output
+    log_message('debug', json_encode([
+        "labels" => $labels,
+        "leap_time_planning" => $planData,
+        "leap_time_actual" => $actualData
+    ]));
+
+    // Kirim data ke frontend
+    return $this->response->setJSON([
+        "labels" => $labels,
+        "leap_time_planning" => $planData,
+        "leap_time_actual" => $actualData
+    ]);
+}
+
+
+
+
+
+
+
+
     
 }

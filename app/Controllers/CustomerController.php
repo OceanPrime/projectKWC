@@ -68,7 +68,7 @@ class CustomerController extends BaseController
         // Debugging
         //log_message('info', 'Data customer_name yang diterima: ' . $customerName);
         //dd($customerName);
-
+        $validation = \Config\Services::validation();
         // Validasi
         if (!$this->validate([
             'customer_name' => [
@@ -79,7 +79,8 @@ class CustomerController extends BaseController
                 ]
             ]
         ])) {
-            return redirect()->back()->withInput()->with('validation', \Config\Services::validation());
+            session()->setFlashdata('error_validation', $validation->listErrors());
+            return redirect()->to('/dev/costumer-tambah')->withInput();
         }
 
         // Simpan data ke database

@@ -41,7 +41,6 @@ class MonitoringController extends BaseController
         return view('development/monitoring/index', $data);
     }
     
-    //tambahan baru view project
     public function view()
     {
         $session = session();
@@ -52,7 +51,7 @@ class MonitoringController extends BaseController
         $data = [
             'nama' => $session->get('nama'),
             'role' => $session->get('role'),
-            'view' => $this->monitoringModel->findAll(),  
+            'view' => $this->monitoringModel->findAll(),
         ];
 
         $data['customers'] = $this->modelModel->select('customer_id, customer_name')->distinct()->findAll();
@@ -62,26 +61,107 @@ class MonitoringController extends BaseController
         return view('development/monitoring/view', $data);
     }
 
-    public function editView()
+    public function editView($id)
     {
         $session = session();
         if ($session->get('role') !== 'Development') {
             return redirect()->to('/');
         }
 
+        $view = new M_Monitoring();
+
         $data = [
+            'title' => 'Update View',
+            'validation' => \Config\Services::validation(),
+            'view' => $view->find($id),
             'nama' => $session->get('nama'),
             'role' => $session->get('role'),
-            'view' => $this->monitoringModel->findAll(),  
         ];
-
-        $data['customers'] = $this->modelModel->select('customer_id, customer_name')->distinct()->findAll();
-        $data['jenis'] = $this->modelModel->distinct()->findColumn('jenis');
-        $data['title'] = 'Monitoring Data';
 
         return view('development/monitoring/editView', $data);
     }
-    //end view project
+
+    public function updateView($id)
+    {
+        $viewBaru = new M_Monitoring();
+        $viewLama = $viewBaru->find($id);
+
+        $validation = \Config\Services::validation();
+
+        if (!$this->validate([
+            'task_name' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Task Name harus diisi',
+                ]
+            ],
+            'start_plan' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Start Plan harus diisi',
+                ]
+            ],
+            'start_actual' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Start Actual harus diisi',
+                ]
+            ],
+            'finish_actual' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Finish Actual harus diisi',
+                ]
+            ],
+            'status' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Status harus diisi',
+                ]
+            ],
+            
+        ])) {
+            session()->setFlashdata('error_validation', $validation->listErrors());
+            return redirect()->back()->withInput()->with('validation', \Config\Services::validation());
+        }
+
+        
+
+        $viewBaru->update($id, [
+            'task_name' => $this->request->getPost('task_name'),
+            'start_plan' => $this->request->getPost('start_plan'),
+            'start_actual' => $this->request->getPost('start_actual'),
+            'finish_plan' => $this->request->getPost('finish_plan'),
+            'finish_actual' => $this->request->getPost('finish_actual'),
+            'status' => $this->request->getPost('status'),
+        ]);
+
+
+        session()->setFlashdata('swal_success', 'Data PIC berhasil diupdate.');
+        return redirect()->to('/dev/monitoring-view');
+    }
+
+    public function deleteView($id)
+    {
+        $view = new M_Monitoring();
+
+        // Periksa apakah ada data terkait di tabel monitoring
+        $isRelated = $view->where('id', $id)->countAllResults();
+
+        if ($isRelated > 0) {
+            // Kirim pesan error ke view
+            return redirect()->to('/dev/monitoring-view')->with('swal_error', 'Tidak dapat menghapus model karena masih digunakan dalam monitoring, Hapus data monitoring terkait terlebih dahulu!');
+        }
+
+        // Hapus data jika tidak ada relasi
+        $data = $view->find($id);
+        if ($data) {
+            $view->delete($id);
+            return redirect()->to('/dev/monitoring-view')->with('swal_success', 'Data berhasil dihapus.');
+        } else {
+            return redirect()->to('/dev/monitoring-view')->with('swal_error', 'Data tidak ditemukan.');
+        }
+    }
 
     public function tambahMonitoring()
     {

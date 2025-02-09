@@ -16,14 +16,18 @@ $routes->get('/logout', 'LoginController::logout');
 $routes->get('/dev/dashboard', 'DashboardController::index');
 $routes->get('dev/monitoring/getModelsByCustomer/(:num)', 'DashboardController::getModelsByCustomer/$1');
 $routes->get('dev/monitoring/getLeadTimeComparison/(:num)/(:num)', 'DashboardController::getLeadTimeComparison/$1/$2');
+$routes->get('dev/monitoring/getLeadTimeComparisonData/(:num)/(:num)', 'DashboardController::getLeadTimeComparisonData/$1/$2');
 
 
 
 /*Monitoring*/
 $routes->get('/dev/monitoring', 'MonitoringController::index');
 
+
 $routes->get('/dev/monitoring-view', 'MonitoringController::view');  //routes baru view project
-$routes->get('/dev/monitoring-editView', 'MonitoringController::editView');  //routes baru view project
+$routes->get('/dev/monitoring-editView/(:num)', 'MonitoringController::editView/$1');  //routes baru view project
+$routes->post('/dev/monitoring-updateView/(:num)', 'MonitoringController::updateView/$1');  //routes baru view project
+$routes->get('/dev/monitoring-deleteView/(:num)', 'MonitoringController::deleteView/$1');  //routes baru view project
 
 $routes->post('/monitoring-save', 'MonitoringController::saveMonitoring');
 $routes->get('/dev/monitoring-tambah', 'MonitoringController::tambahMonitoring');

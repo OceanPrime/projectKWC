@@ -19,6 +19,11 @@
                     </li>
                 </ul>
             </div>
+            <?php if (session()->getFlashdata('error_validation')): ?>
+                            <div class="alert alert-danger">
+                                <?= session()->getFlashdata('error_validation') ?>
+                            </div>
+            <?php endif; ?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
