@@ -22,7 +22,7 @@ class ModelController extends BaseController
     public function model()
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
@@ -40,7 +40,7 @@ class ModelController extends BaseController
     public function tambahModel()
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
@@ -147,7 +147,7 @@ class ModelController extends BaseController
     public function editModel($id)
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 

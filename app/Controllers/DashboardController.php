@@ -22,7 +22,7 @@ class DashboardController extends BaseController
     public function index() // Admin
 {
     $session = session();
-    if ($session->get('role') !== 'Development') {
+    if ($session->get('role') !== 'admin') {
         return redirect()->to('/');
     }
 
@@ -56,7 +56,7 @@ class DashboardController extends BaseController
 
         // **Mapping nama dashboard per role**
         $dashboardTitles = [
-            'Development'       => 'Dashboard Development',
+            'admin'       => 'Dashboard Development',
             'ReDrawing'         => 'Dashboard ReDrawing',
             'ApprovalReDraw'    => 'Dashboard Approval ReDraw',
             'DevelopmentSchedule' => 'Dashboard Development Schedule',
@@ -244,6 +244,9 @@ class DashboardController extends BaseController
             'status'          => $this->request->getPost('status'),
             'leap_time_actual' => $leapTimeActual,
         ]);
+
+
+
 
         session()->setFlashdata('swal_success', 'Task berhasil diperbarui!');
         return redirect()->to('/PIC/TASK');

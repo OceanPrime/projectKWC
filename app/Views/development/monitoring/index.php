@@ -89,9 +89,10 @@
 									<div class="monitoring-row">
 										<div>
 											<div class="label">DIE - GO DATE :</div>
-											<div id="" class="date-input">
-												<input type="date">
+											<div class="date-input">
+												<input type="date" id="die-go-date" readonly>
 											</div>
+
 										</div>
 										<div>
 											<div class="label">STATUS :</div>
@@ -100,20 +101,16 @@
 									</div>
 									<div class="monitoring-row">
 										<div>
-											<div class="label">MASSPRO DATE :</div>
-											<div class="date-input">
-												<input type="date">
-											</div>
+										<div class="label">MASSPRO DATE :</div>
+										<div id="maspro-date-value" class="value">-</div>
+
 										</div>
 										<div>
 											<div class="label">REMARK PIC :</div>
-											<select class="value" id="customer-dropdown" name="customer_id">
-												<option value="">-- Select Customer --</option>
-													<option value="">ReDrawing</option>
-													<option value="">Approval ReDraw</option>
+											<select class="value" id="remark-pic-dropdown" name="remark_pic">
+												<option value="">-- Select PIC --</option>
 											</select>
-											<textarea class="form-control" id="comment" rows="5" readonly>
-											</textarea>
+											<textarea class="form-control" id="remark-pic-textarea" rows="5" readonly></textarea>
 										</div>
 									</div>
 								</div>
@@ -185,62 +182,148 @@
 			}
 		});
 
+		
+
+
+
+
 		$('#project-dropdown').change(function() {
-			var projectId = $(this).val();
+    var projectId = $(this).val();
+    
+    if (projectId) {
+        $.ajax({
+            url: '<?= base_url('monitoring/remarks/') ?>' + projectId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                var dropdown = $('#remark-pic-dropdown');
+                dropdown.empty().append('<option value="">-- Select PIC --</option>');
 
-			if (projectId) {
-				// Fetch project details
-				$.ajax({
-					url: '<?= base_url('monitoring/details/') ?>' + projectId,
-					type: 'GET',
-					dataType: 'json',
-					success: function(response) {
-						console.log("Project details fetched:", response);
-						$('#jenis-value').text(response.jenis);
-						$('#material-value').text(response.material);
-						$('#status-value').text(response.status);
-					},
-					error: function(xhr, status, error) {
-						console.error("Failed to fetch project details:", xhr.responseText);
-						alert('Failed to fetch project details. See console for details.');
-					}
-				});
+                if (response.length > 0) {
+                    response.forEach(function(item) {
+                        dropdown.append('<option value="' + item.pic_id + '" data-remark="' + item.remark + '">' + item.pic_name + '</option>');
+                    });
+                    dropdown.prop('disabled', false); // Aktifkan dropdown
+                } else {
+                    dropdown.append('<option value="">No PIC available</option>');
+                    dropdown.prop('disabled', true);
+                }
+                
+                $('#remark-pic-textarea').val(''); // Kosongkan textarea
+            },
+            error: function(xhr, status, error) {
+                console.error("Failed to fetch PIC:", xhr.responseText);
+                dropdown.append('<option value="">Failed to load</option>');
+            }
+        });
+    } else {
+        $('#remark-pic-dropdown').empty().append('<option value="">-- Select PIC --</option>').prop('disabled', true);
+        $('#remark-pic-textarea').val('');
+    }
+});
 
-				// Fetch tasks for the project
-				$.ajax({
-					url: '<?= base_url('monitoring/tasks/') ?>' + projectId,
-					type: 'GET',
-					dataType: 'json',
-					success: function(response) {
-						console.log("Tasks fetched:", response);
-						var tbody = $('#tasks-table tbody');
-						tbody.html('');
-						response.forEach(function(task) {
-							tbody.append(`
-                                <tr>
-                                    <td>${task.task_name}</td>
-                                    <td>${task.pic_name}</td>
-                                    <td>${task.status}</td>
-                                    <td>${task.start_plan} / ${task.start_actual}</td>
-                                    <td>${task.finish_plan} / ${task.finish_actual}</td>
-                                    <td>${task.gap_sd}</td>
-                                    <td>${task.gap_fd}</td>
-                                    <td>${task.leap_time_planning}</td>
-                                    <td>${task.leap_time_actual}</td>
-                                    <td>${task.leap_time_actual}</td>
-                                </tr>
-                            `);
-						});
-					},
-					error: function(xhr, status, error) {
-						console.error("Failed to fetch tasks:", xhr.responseText);
-						alert('Failed to fetch tasks. See console for details.');
+$('#remark-pic-dropdown').change(function() {
+    var remark = $(this).find(':selected').data('remark');
+    $('#remark-pic-textarea').val(remark || 'Tidak ada remark tersedia');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+	$('#project-dropdown').change(function() {
+		var projectId = $(this).val();
+
+		if (projectId) {
+			// Ambil detail project (jenis, material, status)
+			$.ajax({
+				url: '<?= base_url('monitoring/details/') ?>' + projectId,
+				type: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					console.log("Project details fetched:", response);
+					$('#jenis-value').text(response.jenis);
+					$('#material-value').text(response.material);
+					$('#status-value').text(response.status);
+				},
+				error: function(xhr, status, error) {
+					console.error("Failed to fetch project details:", xhr.responseText);
+					alert('Failed to fetch project details.');
+				}
+			});
+
+			// Ambil Die Go Date
+			$.ajax({
+				url: '<?= base_url('monitoring/getPlanFinish/') ?>' + projectId,
+				type: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					console.log("Die Go Date fetched:", response);
+					if (response.die_go) {
+						$('#die-go-date').val(response.die_go);
+					} else {
+						$('#die-go-date').val('');
 					}
-				});
-			} else {
-				alert('Please select a project.');
-			}
-		});
+				},
+				error: function(xhr, status, error) {
+					console.error("Failed to fetch Die Go Date:", xhr.responseText);
+					alert('Failed to fetch Die Go Date.');
+				}
+			});
+
+			// Ambil Maspro Date dan Task List
+			$.ajax({
+				url: '<?= base_url('monitoring/tasks/') ?>' + projectId,
+				type: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					console.log("Maspro Date & Tasks fetched:", response);
+					
+					let tasks = response.tasks;
+					let masproDate = response.maspro_date ? response.maspro_date : 'Belum Ada Data';
+
+					// Tampilkan MASSPRO DATE
+					$('#maspro-date-value').text(masproDate);
+
+					// Update tabel tasks
+					var tbody = $('#tasks-table tbody');
+					tbody.html('');
+					tasks.forEach(function(task) {
+						tbody.append(`
+							<tr>
+								<td>${task.task_name}</td>
+								<td>${task.pic_name}</td>
+								<td>${task.status}</td>
+								<td>${task.start_plan} / ${task.start_actual}</td>
+								<td>${task.finish_plan} / ${task.finish_actual}</td>
+								<td>${task.gap_sd}</td>
+								<td>${task.gap_fd}</td>
+								<td>${task.leap_time_planning}</td>
+								<td>${task.leap_time_actual}</td>
+							</tr>
+						`);
+					});
+				},
+				error: function(xhr, status, error) {
+					console.error("Failed to fetch Maspro Date & Tasks:", xhr.responseText);
+					alert('Failed to fetch Maspro Date & Tasks.');
+				}
+			});
+
+    } else {
+        alert('Please select a project.');
+    }
+});
+
+
 	});
 </script>
 

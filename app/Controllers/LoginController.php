@@ -52,7 +52,7 @@ class LoginController extends BaseController
     ]);
 
     // Jika role = Development, arahkan ke halaman Development
-    if ($user['role'] == 'Development') {
+    if ($user['role'] == 'admin') {
         return redirect()->to('/dev/dashboard');
     } 
 
@@ -90,7 +90,7 @@ class LoginController extends BaseController
     public function pic()
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
@@ -106,7 +106,7 @@ class LoginController extends BaseController
     public function tambahPIC()
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
@@ -123,7 +123,7 @@ class LoginController extends BaseController
     public function editPIC($user_id)
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 

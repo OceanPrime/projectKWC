@@ -25,7 +25,7 @@ class MonitoringController extends BaseController
     public function index()
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
@@ -44,7 +44,7 @@ class MonitoringController extends BaseController
     public function view()
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
@@ -64,7 +64,7 @@ class MonitoringController extends BaseController
     public function editView($id)
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
@@ -166,7 +166,7 @@ class MonitoringController extends BaseController
     public function tambahMonitoring()
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
@@ -177,7 +177,7 @@ class MonitoringController extends BaseController
 
         $data['users'] = $this->ModelUser
             ->select('user_id, role, nama')
-            ->notLike('role', 'Development') // Kecualikan role Development
+            ->notLike('role', 'admin') // Kecualikan role Development
             ->distinct()
             ->findAll();
 
@@ -291,6 +291,34 @@ class MonitoringController extends BaseController
             ->where('monitoring.model_id', $projectId)
             ->findAll();
 
-        return $this->response->setJSON($tasks);
+        // Ambil finish_actual terakhir dari task Packing&Delivery
+        $packingDelivery = $this->monitoringModel
+            ->where([
+                'model_id'  => $projectId,
+                'task_name' => 'Packing&Delivery'
+            ])
+            ->select('finish_actual')
+            ->orderBy('finish_actual', 'DESC') // Ambil data terbaru
+            ->first();
+
+        $masproDate = $packingDelivery ? $packingDelivery['finish_actual'] : null;
+
+        return $this->response->setJSON([
+            'tasks'       => $tasks,
+            'maspro_date' => $masproDate
+        ]);
     }
+
+    public function getRemarks($projectId)
+{
+    $remarks = $this->monitoringModel
+        ->select('remark, users.nama AS pic_name')
+        ->join('users', 'users.user_id = monitoring.pic_id', 'left') // Ambil data PIC
+        ->where('monitoring.model_id', $projectId)
+        ->findAll();
+
+    return $this->response->setJSON($remarks);
+}
+
+
 }

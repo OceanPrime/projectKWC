@@ -69,12 +69,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="plan_finish">Maspro Date</label>
-                                            <input type="date" id="plan_finish" class="form-control" name="finish_plan" required>
-                                        </div>
-                                    </div>
+                                
                                 </div>
 
                                 <!-- Form Task PIC -->

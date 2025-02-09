@@ -34,6 +34,8 @@ $routes->get('/dev/monitoring-tambah', 'MonitoringController::tambahMonitoring')
 $routes->get('monitoring/planFinish/(:num)', 'MonitoringController::getPlanFinish/$1');
 $routes->get('monitoring/getProjects/(:num)', 'MonitoringController::getProjects/$1');
 $routes->get('monitoring/getPlanFinish/(:num)', 'MonitoringController::getPlanFinish/$1');
+$routes->get('monitoring/remarks/(:num)', 'MonitoringController::getRemarks/$1');
+
 
 /*Model*/
 $routes->get('/dev/model', 'ModelController::model');

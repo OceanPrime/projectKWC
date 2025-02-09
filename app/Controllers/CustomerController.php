@@ -22,7 +22,7 @@ class CustomerController extends BaseController
     {
         
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
@@ -40,7 +40,7 @@ class CustomerController extends BaseController
     public function tambahCustomer()
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
@@ -95,7 +95,7 @@ class CustomerController extends BaseController
     public function editCustomer($id)
     {
         $session = session();
-        if ($session->get('role') !== 'Development') {
+        if ($session->get('role') !== 'admin') {
             return redirect()->to('/');
         }
 
