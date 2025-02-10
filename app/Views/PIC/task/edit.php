@@ -68,11 +68,7 @@
                                 <div class="col-md-6 col-12">
                                     <div class="form-group">
                                         <label for="status">STATUS</label>
-                                        <select class="form-control" name="status" id="status" <?= $isDisabled ? 'disabled' : ''; ?>>
-                                            <option disabled>--Pilih--</option>
-                                            <option value="COMPLETED" <?= ($task['status'] == 'COMPLETED') ? 'selected' : ''; ?>>COMPLETED</option>
-                                            <option value="COMPLETED DELAY" <?= ($task['status'] == 'COMPLETED DELAY') ? 'selected' : ''; ?>>COMPLETED DELAY</option>
-                                        </select>
+                                        <input type="text" class="form-control" id="status" name="status" value="<?= esc($task['status']); ?>" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">

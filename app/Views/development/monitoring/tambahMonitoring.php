@@ -67,9 +67,7 @@
                                             <label for="die_go">DIE-GO</label>
                                             <input type="date" id="die_go" class="form-control" name="die_go" readonly>
                                         </div>
-                                    </div>
-
-                                
+                                    </div>                                 
                                 </div>
 
                                 <!-- Form Task PIC -->
@@ -220,9 +218,9 @@
         const customerId = document.getElementById("customer-dropdown").value;
         const projectId = document.getElementById("project-dropdown").value;
         const dieGo = document.getElementById("die_go").value;
-        const masproDate = document.getElementById("plan_finish").value;
+       
 
-        if (!customerId || !projectId || !dieGo || !masproDate) {
+        if (!customerId || !projectId || !dieGo ) {
             alert("Harap lengkapi data utama sebelum menambahkan Task PIC.");
             return;
         }

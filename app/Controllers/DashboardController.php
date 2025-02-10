@@ -175,11 +175,11 @@ class DashboardController extends BaseController
     
 
     
-        public function update($id)
+    public function update($id)
     {
         $session = session();
         $role = $session->get('role');
-
+    
         // Daftar role dalam urutan yang benar
         $roles = [
             'ReDrawing', 'ApprovalReDraw', 'DevelopmentSchedule', 'MoldManufacture',
@@ -187,34 +187,19 @@ class DashboardController extends BaseController
             'TrialCasting', 'Machining', 'Painting', 'TestImpact', 'TestBending',
             'TestRadial', 'Packing&Delivery'
         ];
-
+    
         // Cek apakah user memiliki role yang valid
         if (!in_array($role, $roles)) {
             return redirect()->to('/belum-ada')->with('error', 'Anda tidak memiliki akses!');
         }
-
+    
         $taskModel = new M_Monitoring();
         $task = $taskModel->find($id);
-
+    
         if (!$task) {
             return redirect()->to('/PIC/TASK')->with('swal_error', 'Task tidak ditemukan!');
         }
-
-        // Cari index role saat ini dalam daftar roles
-        $currentIndex = array_search($role, $roles);
-        
-        // Cek apakah ada role sebelumnya
-        $prevTask = null;
-        if ($currentIndex > 0) {
-            $previousRole = $roles[$currentIndex - 1];
-            $prevTask = $taskModel->where('task_name', $previousRole)->where('id', $id)->first();
-        }
-
-        // Jika ada role sebelumnya dan tasknya belum selesai, larang update
-        if ($prevTask && empty($prevTask['finish_actual'])) {
-            return redirect()->to('/PIC/TASK')->with('swal_error', 'Task sebelumnya belum selesai!');
-        }
-
+    
         // Validasi form
         $validation = \Config\Services::validation();
         if (!$this->validate([
@@ -223,17 +208,40 @@ class DashboardController extends BaseController
             'start_actual'  => 'required|valid_date',
             'finish_actual' => 'required|valid_date',
             'remark'        => 'required|min_length[3]',
-            'status'        => 'required|in_list[COMPLETED,COMPLETED DELAY]',
         ])) {
             session()->setFlashdata('error_validation', $validation->listErrors());
             return redirect()->back()->withInput();
         }
-
-        // Hitung leap_time_actual (selisih hari antara start_actual dan finish_actual)
+    
+        // Hitung Gap S.D. dan Gap F.D.
+        $startPlan = new \DateTime($this->request->getPost('start_plan'));
         $startActual = new \DateTime($this->request->getPost('start_actual'));
+        $gapSD = $startActual->diff($startPlan)->days;
+    
+        $finishPlan = new \DateTime($this->request->getPost('finish_plan'));
         $finishActual = new \DateTime($this->request->getPost('finish_actual'));
+        $gapFD = $finishActual->diff($finishPlan)->days;
+    
+        // Jika Start Actual lebih lambat dari Start Plan, gapSD positif (telat)
+        if ($startActual > $startPlan) {
+            $gapSD = +$gapSD;
+        } else {
+            $gapSD = -$gapSD;
+        }
+    
+        // Jika Finish Actual lebih lambat dari Finish Plan, gapFD positif (telat)
+        if ($finishActual > $finishPlan) {
+            $gapFD = +$gapFD;
+        } else {
+            $gapFD = -$gapFD;
+        }
+    
+        // Hitung Leap Time Actual (selisih hari antara Start Actual dan Finish Actual)
         $leapTimeActual = $startActual->diff($finishActual)->days;
-
+    
+        // **Tambahan: Tentukan Status Otomatis**
+        $status = ($gapFD <= 0) ? 'COMPLETED' : 'COMPLETED DELAY';
+    
         // Update data ke database
         $taskModel->update($id, [
             'start_plan'      => $this->request->getPost('start_plan'),
@@ -241,16 +249,16 @@ class DashboardController extends BaseController
             'start_actual'    => $this->request->getPost('start_actual'),
             'finish_actual'   => $this->request->getPost('finish_actual'),
             'remark'          => $this->request->getPost('remark'),
-            'status'          => $this->request->getPost('status'),
+            'status'          => $status, // **Status otomatis**
+            'gap_sd'          => $gapSD,  
+            'gap_fd'          => $gapFD,  
             'leap_time_actual' => $leapTimeActual,
         ]);
-
-
-
-
-        session()->setFlashdata('swal_success', 'Task berhasil diperbarui!');
-        return redirect()->to('/PIC/TASK');
+    
+        return redirect()->to('/PIC/TASK')->with('swal_success', 'Task berhasil diperbarui!');
     }
+    
+    
 
 
 
